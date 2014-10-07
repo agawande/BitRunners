@@ -2,7 +2,7 @@ Input file format: text
 
     Group            ||||        Actual format	          ||||            Description
 
-Simulation length:          (float)\n                               Length of the simulation in hours
+Simulation length:	        (float)\n                               Length of the simulation in hours
 Storms:                     (float) (float) (float)\n               Mean of storm occurence, base length, variation length
 Taxis:                      (int) (float) (float)\n                 Number of taxis, empty travel time, de/berthing travel time
 Fixed planes:               (float) (float)\n                       Base plane arrival rate, variation rate
