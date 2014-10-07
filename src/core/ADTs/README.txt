@@ -9,7 +9,7 @@ Fixed planes:               (float) (float)\n                       Base plane a
                             (int)\n                                 Number of planes of a type
                                 (float) (float) (float)\n           Frequency, base loading time, variation in loading time
 External planes:            (int)\n                                 Number of sets of external planes
-                            (int)\n                                 Number of planes in the set
+                                (int)\n                             Number of planes in the set
                                 (float) (float)\n                   Loading base time, variation time
                                 (float) (float)\n                   Round trip base time, variation in RTT
 
