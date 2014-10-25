@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>Simulation GUI</title>
+</head>
+<style>
+.left {
+    width:180px;
+    float: left;
+    text-align: left;
+	margin-left:40px;
+}
+.right {
+    margin-left: 40px;
+    float:left;
+	display: inline-block;
+}
+
+.field{
+    display: inline-block;
+	vertical-align:top;
+}
+
+.field1{
+    display: inline-block;
+	height:100%;
+	overflow:hidden;
+}
+
+
+input[type=text] {
+  border: 1px solid;
+  border-radius: 5;
+  height: 20px;
+}
+</style>
+
+<body>
+<form>
+ <table>
+ <tr>
+  <td><fieldset class = "field" >
+    <legend><b>Simulation Length:</b></legend>
+	<legend><embed src="images/sim-time.jpg" height="110px"></legend>
+	        <br /><br />
+			<div style="margin-left:50px; margin-top:-110px;">
+            <div class="left">Length of simulation: </div><br/>
+			<div class="right"> <input type="text"> </div>
+			<br /><br /><br /><br />
+			</div>
+  </fieldset></td>
+  <td>
+  <fieldset class = "field1" >
+    <legend><b>Storms:</b></legend>
+	        <legend><embed src="images/storm.jpg" height="120px" width="120px"></legend>
+			<div style="margin:-120px 0px 0px 130px; display:inline-block;">
+			<div class="left"> Mean of storm occurrence: </div>
+			<div class="right"> <input type="text"> </div>
+            <br><br>
+			<div class="left">Base Length: </div>
+			<div class="right"> <input type="text"></div>
+			<br><br>
+			<div class="left">Variation Length: </div>
+			<div class="right"> <input type="text"> </div>
+			</div>
+  </fieldset></td>
+  <td><fieldset class = "field" >
+    <legend><b>Taxiway:</b></legend>
+	<legend><embed src="images/taxiway.jpg" height="110px" width="80px"></legend>
+			<div style="margin-left:50px; margin-top:-110px;">
+			 <div class="left">Number of Taxiways: </div><br/>
+			<div class="right"> <input type="text"> </div><br/><br/>
+            <div class="left">Travel Time: </div><br/>
+			<div class="right"> <input type="text"> </div>
+			<br /><br /><br />
+			</div>
+  </fieldset></td>
+  </tr> </table>
+  <table>
+  <td style="padding-right:15px;"> <fieldset class = "field1" >
+    <legend><b>Fixed planes:</b></legend>
+	        <legend><embed src="images/fixed-plane.jpg" height="120px" width="120px"></legend>
+			<div style="margin:-120px 0px 0px 130px; display:inline-block;">
+			<div class="left"> Arrival rate: </div>
+			<div class="right"> <input type="text"> </div>
+            <br><br>
+			<div class="left">Base Length: </div>
+			<div class="right"> <input type="text"></div>
+			<br><br>
+			<div class="left">Variation Length: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Number of planes: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Frequency: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Base loading time: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Variation in loading time: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Cat 3 landing gear probablity: </div>
+			<div class="right"> <input type="text"> </div>
+			</div>
+  </fieldset></td>
+  <td> <fieldset class = "field1" >
+    <legend><b>External planes:</b></legend>
+	        <legend><embed src="images/external-plane.jpg" height="120px" width="120px"></legend>
+			<div style="margin:-120px 0px 0px 130px; display:inline-block;">
+			<div class="left">Number of sets of external planes: </div>
+			<div class="right"> <input type="text"> </div>
+            <br><br>
+			<div class="left">Number of planes in the set: </div>
+			<div class="right"> <input type="text"></div>
+			<br><br>
+			<div class="left">Cat3 landing gear probability: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Variation in loading time: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Frequency: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Base loading time: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Variation in loading time: </div>
+			<div class="right"> <input type="text"> </div>
+			<br><br>
+			<div class="left">Cat 3 landing gear probablity: </div>
+			<div class="right"> <input type="text"> </div>
+			</div>
+  </fieldset></td></tr>
+  </table>
+  
+  <input type="submit">
+  </form>
+</body>
+</html>
