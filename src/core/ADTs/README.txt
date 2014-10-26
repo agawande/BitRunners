@@ -4,7 +4,7 @@ Input file format: text
 
 Simulation length:          (float)\n                               Length of the simulation in hours
 Storms:                     (float) (float) (float)\n               Mean of storm occurence, base length, variation length
-Taxiways:                   (int) (float)\n                         Number of taxiways, travel time
+Airport:                    (int) (int) (float)\n                   Number of berths, number of taxiways, travel time
 Fixed planes:               (float) (float) (float)\n               Base plane arrival rate, variation rate
                             (int)\n                                 Number of planes of a type
                                 (float) (float) (float)\n           Frequency, base loading time, variation in loading time
