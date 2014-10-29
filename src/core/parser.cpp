@@ -92,7 +92,8 @@ char* readNextFloat(char *src, float *dst){
 	return src;
 }
 
-//TODO
+//readInputFile: reads and parses the input file. Returns a structure with all the
+//	parameters required to run the simulation.
 Parameters* readInputFile(char *filepath){
 	Parameters *parameters = (Parameters*)malloc(sizeof(Parameters));
 	
@@ -119,24 +120,22 @@ Parameters* readInputFile(char *filepath){
 	cline = readNextInt(cline, &parameters->numTaxiways);
 	cline = readNextFloat(cline, &parameters->taxiwayTravelTime);
 	cline = readNextFloat(cline, &parameters->berthingTime);
-	//Fixed plane arrival rate
-	getline(file, line);
-	cline = line.c_str();
-	cline = readNextFloat(cline, &parameters->planeBaseTime);
-	cline = readNextFloat(cline, &parameters->planeTimeVariation);
-	//Number of types of fixed planes
-	getline(file, line);
-	cline = line.c_str();
-	cline = readNextInt(cline, &parameters->numFixedPlaneTypes);
 	
-	parameters->fixedPlaneTypes = (FixedPlaneType*)malloc(parameters->numFixedPlaneTypes*sizeof(FixedPlaneType));
-	for (i=0; i<parameters->numFixedPlaneTypes; i++){
-		getline(file, line);
-		cline = line.c_str();
-		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].frequency);
-		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].baseLoadingTime);
-		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].loadingVariationTime);
-	}
+	//Fixed plane parameters
+	//Timing parameters: arrival
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.arrivalBaseTime);
+	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.arrivalTimeVariation);
+	//Timing parameters: load
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.baseLoadingTime);
+	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.loadingVariationTime);
+	//Cat 3 landing gear probability
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.cat3LandingGearProbability);
 	
 	//Number of types of external planes
 	getline(file, line);
@@ -149,32 +148,23 @@ Parameters* readInputFile(char *filepath){
 		getline(file, line);
 		cline = line.c_str();
 		cline = readNextInt(cline, &parameters->fixedPlaneTypes[i].numPlanes);
-		//
-		getline
-		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].frequency);
+		//Timing parameters: load
+		getline(file, line);
+		cline = line.c_str();
 		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].baseLoadingTime);
 		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].loadingVariationTime);
+		//Timing parameters: round trip
+		getline(file, line);
+		cline = line.c_str();
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].baseRTTime);
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].RTVariationTime);
+		//Cat 3 landing gear probability
+		getline(file, line);
+		cline = line.c_str();
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.cat3LandingGearProbability);
 	}
-	
 	
 	file.close();
 	
 	return parameters;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
