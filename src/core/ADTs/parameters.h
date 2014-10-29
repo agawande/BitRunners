@@ -5,8 +5,9 @@
  * A plane whose frequency is fixed. *
  *************************************/
 typedef struct sFixedPlaneType{
-	float frequency;
+	float planeArrivalBaseTime, planeArrivalTimeVariation;
 	float baseLoadingTime, loadingVariationTime;
+	float cat3LandingGearProbability
 }FixedPlaneType;
 
 /*************************************
@@ -26,23 +27,18 @@ typedef struct sParameters{
 	float simLength;
 	//Storm timing parameters.
 	float stormMean, stormBaseTime, stormTimeVariation;
-	//Taxi parameters:
-	//Number of taxis.
-	int numTaxi;
-	//Taxi timing parameters.
-	float emptyTravelTime, transportingTravelTime;
-	//Fixed arrival frequency planes:
-	//Frequency.
-	float planeBaseTime, planeTimeVariation;
-	//Number of types of fixed planes.
-	int numTypes;
-	//Fixed planes parameters.
-	FixedPlaneType *planeTypes;
+	//Airport parameters:
+	//Number of berths and taxiways.
+	int numBerths, numTaxiways;
+	//Time it takes to berth, deberth and travel across the taxiway.
+	float taxiwayTravelTime, berthingTime;
+	//Fixed plane parameters.
+	FixedPlaneType fixedPlaneType;
 	//Additional plane types:
 	//Number of types of additional planes.
 	int numExternalTypes;
 	//External planes parameters.
-	ExternalPlaneType *externalPlanesTypes;
+	ExternalPlaneType *externalPlaneTypes;
 }Parameters;
 
 #endif

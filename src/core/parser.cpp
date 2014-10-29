@@ -1,5 +1,9 @@
+#include <fstream>
 #include <stddef.h>
+#include <stdlib.h>
 #include "parser.hpp"
+
+using namespace std;
 
 inline int isNumber(char *src){
 	return *src>='0' && *src<='9';
@@ -90,5 +94,87 @@ char* readNextFloat(char *src, float *dst){
 
 //TODO
 Parameters* readInputFile(char *filepath){
-	return NULL;
+	Parameters *parameters = (Parameters*)malloc(sizeof(Parameters));
+	
+	ifstream file;
+	file.open(filepath);
+	
+	string line;
+	char *cline;
+	int i;
+	
+	//Simulation time
+	getline(file, line);
+	readNextFloat(line.c_str(), &parameters->simLength);
+	//Storm parameters
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextFloat(cline, &parameters->stormMean);
+	cline = readNextFloat(cline, &parameters->stormBaseTime);
+	cline = readNextFloat(cline, &parameters->stormTimeVariation);
+	//Taxiways
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextInt(cline, &parameters->numBerths);
+	cline = readNextInt(cline, &parameters->numTaxiways);
+	cline = readNextFloat(cline, &parameters->taxiwayTravelTime);
+	cline = readNextFloat(cline, &parameters->berthingTime);
+	//Fixed plane arrival rate
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextFloat(cline, &parameters->planeBaseTime);
+	cline = readNextFloat(cline, &parameters->planeTimeVariation);
+	//Number of types of fixed planes
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextInt(cline, &parameters->numFixedPlaneTypes);
+	
+	parameters->fixedPlaneTypes = (FixedPlaneType*)malloc(parameters->numFixedPlaneTypes*sizeof(FixedPlaneType));
+	for (i=0; i<parameters->numFixedPlaneTypes; i++){
+		getline(file, line);
+		cline = line.c_str();
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].frequency);
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].baseLoadingTime);
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].loadingVariationTime);
+	}
+	
+	//Number of types of external planes
+	getline(file, line);
+	cline = line.c_str();
+	cline = readNextInt(cline, &parameters->numExternalPlaneTypes);
+	
+	parameters->externalPlaneTypes = (ExternalPlaneType*)malloc(parameters->numExternalPlaneTypes*sizeof(ExternalPlaneType));
+	for (i=0; i<parameters->numExternalPlaneTypes; i++){
+		//Number of planes in the set
+		getline(file, line);
+		cline = line.c_str();
+		cline = readNextInt(cline, &parameters->fixedPlaneTypes[i].numPlanes);
+		//
+		getline
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].frequency);
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].baseLoadingTime);
+		cline = readNextFloat(cline, &parameters->fixedPlaneTypes[i].loadingVariationTime);
+	}
+	
+	
+	file.close();
+	
+	return parameters;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
