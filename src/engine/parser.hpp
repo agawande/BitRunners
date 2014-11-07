@@ -3,9 +3,6 @@
 
 #include "ADTs/parameters.h"
 
-//Testing
-char* readNextInt(char*, int*);
-char* readNextFloat(char*, float*);
 Parameters* readInputFile(char*);
 
 #endif

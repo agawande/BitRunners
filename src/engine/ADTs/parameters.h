@@ -34,10 +34,10 @@ typedef struct sParameters{
 	//Time it takes to berth, deberth and travel across the taxiway.
 	float taxiwayTravelTime, berthingTime;
 	//Fixed plane parameters.
-	FixedPlaneType fixedPlaneTypeParameters;
+	FixedPlaneTypeParameters fixedPlaneTypeParameters;
 	//Additional plane types:
 	//Number of types of additional planes.
-	int numExternalTypes;
+	int numExternalPlaneTypes;
 	//External planes parameters.
 	ExternalPlaneType *externalPlaneTypes;
 }Parameters;
