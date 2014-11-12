@@ -149,16 +149,16 @@ Parameters* readInputFile(char *filepath){
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
 		cline = readNextInt(cline, &parameters->xPlaneTypes[i].numPlanes);
-		//Timing parameters: load
-		getline(file, line);
-		cline = const_cast<char*>(line.c_str());
-		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_i);
-		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_f);
 		//Timing parameters: round trip
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
 		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].RTT_i);
 		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].RTT_f);
+		//Timing parameters: load
+		getline(file, line);
+		cline = const_cast<char*>(line.c_str());
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_i);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_f);
 		//Cat 3 landing gear probability
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
