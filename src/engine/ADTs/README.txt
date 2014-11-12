@@ -10,8 +10,8 @@ Fixed planes:               (float) (float)\n                       Base plane a
                             (float)\n                               Cat3 landing gear probability
 External planes:            (int)\n                                 Number of sets of external planes
                                 (int)\n                             Number of planes in the set
-                                (float) (float)\n                   Loading base time, variation time
                                 (float) (float)\n                   Round trip base time, variation in RTT
+                                (float) (float)\n                   Loading base time, variation time
                                 (float)\n                           Cat3 landing gear probability
 
 
