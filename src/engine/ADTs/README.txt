@@ -3,15 +3,15 @@ Input file format: text
     Group            ||||        Actual format	           ||||            Description
 
 Simulation length:          (float)\n                               Length of the simulation in hours
-Storms:                     (float) (float) (float)\n               Mean of storm occurence, base length, variation length
+Storms:                     (float) (float) (float)\n               Mean of storm occurence, length interval (i, f)
 Airport:                    (int) (int) (float) (float)\n           Number of berths, number of taxiways, travel time, de/berthing time
-Fixed planes:               (float) (float)\n                       Base plane arrival rate, variation rate
-                            (float) (float)\n                       Base loading time, variation in loading time
+Fixed planes:               (float) (float)\n                       Arrival time interval (i, f)
+                            (float) (float)\n                       Loading time interval (i, f)
                             (float)\n                               Cat3 landing gear probability
 External planes:            (int)\n                                 Number of sets of external planes
                                 (int)\n                             Number of planes in the set
-                                (float) (float)\n                   Round trip base time, variation in RTT
-                                (float) (float)\n                   Loading base time, variation time
+                                (float) (float)\n                   RTT interval (i, f)
+                                (float) (float)\n                   Loading time interval (i, f)
                                 (float)\n                           Cat3 landing gear probability
 
 

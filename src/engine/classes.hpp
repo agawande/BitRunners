@@ -32,6 +32,10 @@ class Berth{
 		void free(void){
 			status = free;
 		}
+		
+		bool isFree(void){
+			return status==free;
+		}
 }
 
 class Taxiway{
@@ -53,6 +57,10 @@ class Taxiway{
 		
 		void free(void){
 			status = free;
+		}
+		
+		bool isFree(void){
+			return status==free;
 		}
 }
 

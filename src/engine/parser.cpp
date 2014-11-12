@@ -112,8 +112,8 @@ Parameters* readInputFile(char *filepath){
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
 	cline = readNextFloat(cline, &parameters->stormMean);
-	cline = readNextFloat(cline, &parameters->stormBaseTime);
-	cline = readNextFloat(cline, &parameters->stormTimeVariation);
+	cline = readNextFloat(cline, &parameters->storm_i);
+	cline = readNextFloat(cline, &parameters->storm_f);
 	//Taxiways
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
@@ -126,43 +126,43 @@ Parameters* readInputFile(char *filepath){
 	//Timing parameters: arrival
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
-	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.arrivalBaseTime);
-	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.arrivalTimeVariation);
+	cline = readNextFloat(cline, &parameters->fxTypeParams.arrival_i);
+	cline = readNextFloat(cline, &parameters->fxTypeParams.arrival_f);
 	//Timing parameters: load
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
-	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.baseLoadingTime);
-	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.loadingVariationTime);
+	cline = readNextFloat(cline, &parameters->fxTypeParams.loading_i);
+	cline = readNextFloat(cline, &parameters->fxTypeParams.loading_f);
 	//Cat 3 landing gear probability
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
-	cline = readNextFloat(cline, &parameters->fixedPlaneTypeParameters.cat3LandingGearProbability);
+	cline = readNextFloat(cline, &parameters->fxTypeParams.cat3Prob);
 	
 	//Number of types of external planes
 	getline(file, line);
 	cline = const_cast<char*>(line.c_str());
-	cline = readNextInt(cline, &parameters->numExternalPlaneTypes);
+	cline = readNextInt(cline, &parameters->numXPlaneTypes);
 	
-	parameters->externalPlaneTypes = (ExternalPlaneType*)malloc(parameters->numExternalPlaneTypes*sizeof(ExternalPlaneType));
-	for (i=0; i<parameters->numExternalPlaneTypes; i++){
+	parameters->xPlaneTypes = (XPlaneType*)malloc(parameters->numXPlaneTypes*sizeof(XPlaneType));
+	for (i=0; i<parameters->numXPlaneTypes; i++){
 		//Number of planes in the set
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
-		cline = readNextInt(cline, &parameters->externalPlaneTypes[i].numPlanes);
+		cline = readNextInt(cline, &parameters->xPlaneTypes[i].numPlanes);
 		//Timing parameters: load
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
-		cline = readNextFloat(cline, &parameters->externalPlaneTypes[i].baseLoadingTime);
-		cline = readNextFloat(cline, &parameters->externalPlaneTypes[i].loadingVariationTime);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_i);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].loading_f);
 		//Timing parameters: round trip
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
-		cline = readNextFloat(cline, &parameters->externalPlaneTypes[i].baseRTTime);
-		cline = readNextFloat(cline, &parameters->externalPlaneTypes[i].RTVariationTime);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].RTT_i);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].RTT_f);
 		//Cat 3 landing gear probability
 		getline(file, line);
 		cline = const_cast<char*>(line.c_str());
-		cline = readNextFloat(cline, &parameters->externalPlaneTypes[i].cat3LandingGearProbability);
+		cline = readNextFloat(cline, &parameters->xPlaneTypes[i].cat3Prob);
 	}
 	
 	file.close();
