@@ -1,6 +1,8 @@
 <html>
 <head>
 <title>Simulation GUI</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="readAndWrite.js"></script>
 </head>
 <style>
 
@@ -61,7 +63,7 @@ input[type=text] {
 		<h2>Weather</h2>
 		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
 		<input type="text" id="storm_mean">
-		<div class="caption">Storm length (hours)</div>
+		<div class="caption">Mean Storm length (hours)</div>
 		<input type="text" id="storm_length">
 		<div class="caption">Storm length variation (hours)</div>
 		<input type="text" id="storm_variation">
@@ -93,17 +95,22 @@ input[type=text] {
 	<div class="container" id="external_plane_params">
 		<h2>External plane set 1 parameters</h2>
 		<div class="caption">Number of planes</div>
-		<input type="text" id="ex_plane_number_1">
+		<input type="text" id="ex_plane_number" placeholder="ex_plane_number">
 		<div class="caption">Round trip time (hours)</div>
-		<input type="text" id="ex_plane_rtt_1">
+		<input type="text" id="ex_plane_rtt" placeholder="ex_plane_rtt">
 		<div class="caption">Round trip time variation (hours)</div>
-		<input type="text" id="ex_plane_rtt_variation_1">
+		<input type="text" id="ex_plane_rtt_variation" placeholder="ex_plane_rtt_variation">
 		<div class="caption">Loading time (hours)</div>
-		<input type="text" id="ex_plane_loading_time_1">
+		<input type="text" id="ex_plane_loading_time" placeholder="ex_plane_loading_time">
 		<div class="caption">Loading time variation (hours)</div>
-		<input type="text" id="ex_plane_loading_time_variation_1">
+		<input type="text" id="ex_plane_loading_time_variation" placeholder="ex_plane_loading_time_variation">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
-		<input type="text" id="ex_cat3_landing_1">
+		<input type="text" id="ex_cat3_landing" placeholder="ex_cat3_landing">
 	</div>
+	<input type="button" class="buttonWidth" id="btnAddressAdd" value="Add Worksite Addressess" onClick="addSet()"/>
+
+	<input type="button" id="processAllDup" value="Process" onClick="processAllSets()" />
+
+	<input type="button" id="delete" value="delete" onClick="deleteSet()" />
 </body>
 </html>
