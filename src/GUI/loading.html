@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Simulation GUI</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+</head>
+<script>
+
+$( document ).ready(function() {
+    console.log( "ready!" );
+		$.ajax({
+      			type: "POST",
+      			url: "pollFile.php",
+			});
+});
+
+</script>
+
+</html>

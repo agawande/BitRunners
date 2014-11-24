@@ -2,35 +2,48 @@
 	var processDuplicateButton = document.getElementById("processAllDup");
     var deleteNode = document.getElementById("delete");
 	var noOfFields = 6;
+	var inputString = "";
+	var simTime="aaaa";
 	
 	alert('Javascript file is opened!');
 	$(function() {
       alert('Jquery file is working');
-	}); 
+	});
 	
 	function addSet(){
-		var sourceNode = document.getElementById("external_plane_params");
-        var node = duplicateNode(sourceNode, ["id", "name", "placeholder"]);
-        console.log(node);
-        sourceNode.parentNode.appendChild(node);
-		console.log("Hello");
-	}	
+	    if(counter<5)
+		{
+			var sourceNode = document.getElementById("external_plane_params");
+			var node = duplicateNode(sourceNode, ["id", "name", "placeholder"]);
+			console.log(node);
+			sourceNode.parentNode.appendChild(node);
+			console.log("Hello");
+			if(counter==4)
+			{
+				document.getElementById("btnAddressAdd").disabled=true;
+			}
+		}
+	}
 	
 	function deleteSet(){
-        	var node = "external_plane_params_" + counter;
-			var parent = document.getElementById(node);
-			parent.parentNode.removeChild(parent);
-			counter--;
-			//console.log(parent);
-			//var child = document.getElementById("college_"+counter);
-			//child.parentNode.removeChild(child);
+			if(counter!=0)
+			{
+				var node = "external_plane_params_" + counter;
+				var parent = document.getElementById(node);
+				parent.parentNode.removeChild(parent);
+				counter--;
+				if(counter<4) {document.getElementById("btnAddressAdd").disabled=false;}
+				//console.log(parent);
+				//var child = document.getElementById("college_"+counter);
+				//child.parentNode.removeChild(child);
+			}
     }
 	
     
     function processAllSets () {
         console.log("Yay");
 		 //Sim Time
-		var simTime = document.getElementById("sim_time"); 
+		simTime = parseFloat(document.getElementById("sim_time").value);
 		
 		//Weather set
 		var stormMean = 	parseFloat(document.getElementById("storm_mean").value);
@@ -63,7 +76,7 @@
 		var field = "";
 		var fieldValue="";
 		var str="";
-		var ex_string="";
+		var ex_str="";
 		
 		for (var i = 0; i <= counter; i++) 
 		{			
@@ -89,13 +102,24 @@
 				}	
 				str+=fieldValue.value+" ";
 			}  //end of inner for
-			console.log(str);
-			ex_str = str + "\n";
+			//console.log(str);
+			ex_str += str + "\n";
 			str="";
 		} // end of outer for
-		console.log(ex_str);
+		//console.log(ex_str);
+		//console.log(simTime);
+		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + ex_str;
+		console.log(inputString);
+		
+			$.ajax({
+      			type: "POST",
+      			url: "save.php",
+      			data: { input: inputString }
+			});
+			
+			window.location.href = 'loading.html';
     }
-    	
+    
     var counter = 0;
     function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
         counter++;
@@ -121,36 +145,213 @@
         return out;
     }
 	
-	
-	
-	$(document).ready(function(){     
+	function checkInput(textid)
+	{
+		var input = document.getElementById(textid);
+		var val = parseFloat(input.value);
+		if(!input.value.match(/^\d+(\.\d+)?$/))
+		{
+			wrong(textid);
+		}
+		else
+		{
+		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
+			{
+				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/)){ wrong(textid); }
+				else{correct(textid);}
+				if(textid == "berth_number")
+				{
+					if(val > 10 || val < 3 ){wrong(textid);}
+					else{correct(textid);}
+				}
+				 if(textid == "taxiway_number")
+				{
+					if(val > 10 || val < 1){wrong(textid);}
+					else{correct(textid);}
+				}
+				 if(textid == "ex_plane_number")
+				{
+					if(val > 10 || val < 1){wrong(textid);}
+					else{correct(textid);}
+				}
+			}
+			else if(textid == "sim_time")
+			{
+				console.log('rect');
+				if(val > 87658.1 || val < 720){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "storm_mean")
+			{
+				if(val > 72 || val < 24 ){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "storm_length")
+			{
+				if(val > 24 || val < 2 ){wrong(textid);}
+				else
+				{
+					correct(textid);
+					if(val>=parseFloat(document.getElementById("storm_variation").value) && parseInt(document.getElementById("storm_variation").value)!=0) {correct("storm_variation");}
+					else{wrong("storm_variation");}
+				}
+			}
+			else if(textid == "storm_variation")
+			{
+				console.log(val + "     " + document.getElementById("storm_length").value);
+				if(val>parseFloat(document.getElementById("storm_length").value)) {wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "taxiway_travel_time")
+			{
+				if(val > 4 || val < 0.25){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "deberthing_time")
+			{
+				if(val >  4 || val < 0.25){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "plane_arrival_rate")
+			{
+				if(val > 12 || val < 5){wrong(textid);}
+				else
+				{
+					correct(textid);
+					if(val>=parseFloat(document.getElementById("plane_arrival_rate_variation").value) && parseFloat(document.getElementById("plane_arrival_rate_variation").value)!=0) {correct("plane_arrival_rate_variation");}
+					else{wrong("plane_arrival_rate_variation");}
+				}
+			}
+			else if(textid == "plane_arrival_rate_variation")
+			{
+				if(val>parseFloat(document.getElementById("plane_arrival_rate").value) && parseFloat(document.getElementById("plane_arrival_rate").value)!=0) {wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "plane_loading_time")
+			{
+				if(val > 50 || val < 10){wrong(textid);}
+				else
+				{
+					correct(textid);
+					if(val>=document.getElementById("plane_loading_time_variation").value && document.getElementById("plane_loading_time_variation").value!=0){correct("plane_loading_time_variation");}
+					else{wrong("plane_loading_time_variation");}
+				}
+			}
+			else if(textid == "plane_loading_time_variation")
+			{
+				console.log(val + "  >  " + document.getElementById("plane_loading_time").value);
+				if(val>document.getElementById("plane_loading_time").value){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "cat3_landing")
+			{
+				if(val > 100 || val < 0){wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "ex_plane_rtt" || textid == "ex_plane_rtt_1" || textid == "ex_plane_rtt_2" || textid == "ex_plane_rtt_3" || textid == "ex_plane_rtt_4")
+			{
+				if(val > 200 || val < 10){wrong(textid);}
+				else
+				{
+					correct(textid);
+					switch(textid)
+					{
+						case "ex_plane_rtt": if(val>=document.getElementById("ex_plane_rtt_variation").value && document.getElementById("ex_plane_rtt_variation").value!=0){correct("ex_plane_rtt_variation");} else{wrong(("ex_plane_rtt_variation"))} break;
+						case "ex_plane_rtt_1": if(val>=document.getElementById("ex_plane_rtt_variation_1").value && document.getElementById("ex_plane_rtt_variation_1").value!=0){correct("ex_plane_rtt_variation_1");} else{wrong(("ex_plane_rtt_variation_1"))} break;
+						case "ex_plane_rtt_2": if(val>=document.getElementById("ex_plane_rtt_variation_2").value && document.getElementById("ex_plane_rtt_variation_2").value!=0){correct("ex_plane_rtt_variation_2");} else{wrong(("ex_plane_rtt_variation_2"))} break;
+						case "ex_plane_rtt_3": if(val>=document.getElementById("ex_plane_rtt_variation_3").value && document.getElementById("ex_plane_rtt_variation_3").value!=0){correct("ex_plane_rtt_variation_3");} else{wrong(("ex_plane_rtt_variation_3"))} break;
+						case "ex_plane_rtt_4": if(val>=document.getElementById("ex_plane_rtt_variation_4").value && document.getElementById("ex_plane_rtt_variation_4").value!=0){correct("ex_plane_rtt_variation_4");} else{wrong(("ex_plane_rtt_variation_4"))} break;
+						default: break;
+					}
+					
+				}
+			}
+			else if(textid == "ex_plane_rtt_variation" || textid == "ex_plane_rtt_variation_1" || textid == "ex_plane_rtt_variation_2" || textid == "ex_plane_rtt_variation_3" || textid == "ex_plane_rtt_variation_4")
+			{						
+			    console.log(val > document.getElementById("ex_plane_rtt").value);
+				switch(textid)
+				{
+						case "ex_plane_rtt_variation": if(val>document.getElementById("ex_plane_rtt").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_rtt_variation_1": if(val>document.getElementById("ex_plane_rtt_1").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_rtt_variation_2": if(val>document.getElementById("ex_plane_rtt_2").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_rtt_variation_3": if(val>document.getElementById("ex_plane_rtt_3").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_rtt_variation_4": if(val>document.getElementById("ex_plane_rtt_4").value){wrong(textid);} else{correct(textid);} break;
+				}				
+			}
+			else if(textid == "ex_plane_loading_time" || textid == "ex_plane_loading_time_1" || textid == "ex_plane_loading_time_2" || textid == "ex_plane_loading_time_3" || textid == "ex_plane_loading_time_4")
+			{
+				if(val > 50 || val < 10){wrong(textid);}
+				else
+				{
+					correct(textid);
+					switch(textid)
+					{
+						case "ex_plane_loading_time": if(val>=document.getElementById("ex_plane_loading_time_variation").value && document.getElementById("ex_plane_loading_time_variation").value!=0){correct("ex_plane_loading_time_variation");}  else{wrong("ex_plane_loading_time_variation");} break;
+						case "ex_plane_loading_time_1": if(val>=document.getElementById("ex_plane_loading_time_variation_1").value && document.getElementById("ex_plane_loading_time_variation_1").value!=0){correct("ex_plane_loading_time_variation_1");} else{wrong("ex_plane_loading_time_variation_1");} break;
+						case "ex_plane_loading_time_2": if(val>=document.getElementById("ex_plane_loading_time_variation_2").value && document.getElementById("ex_plane_loading_time_variation_2").value!=0){correct("ex_plane_loading_time_variation_2");} else{wrong("ex_plane_loading_time_variation_2");} break;
+						case "ex_plane_loading_time_3": if(val>=document.getElementById("ex_plane_loading_time_variation_3").value && document.getElementById("ex_plane_loading_time_variation_3").value!=0){correct("ex_plane_loading_time_variation_3");} else{wrong("ex_plane_loading_time_variation_3");} break;
+						case "ex_plane_loading_time_4": if(val>=document.getElementById("ex_plane_loading_time_variation_4").value && document.getElementById("ex_plane_loading_time_variation_4").value!=0){correct("ex_plane_loading_time_variation_4");} else{wrong("ex_plane_loading_time_variation_4");} break;
+					}
+				}
+			}
+			else if(textid == "ex_plane_loading_time_variation" || textid == "ex_plane_loading_time_variation_1" || textid == "ex_plane_loading_time_variation_2" || textid == "ex_plane_loading_time_variation_3" || textid == "ex_plane_loading_time_variation_4")
+			{
+				switch(textid)
+				{
+						
+						case "ex_plane_loading_time_variation": if(val>document.getElementById("ex_plane_loading_time").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_loading_time_variation_1": if(val>document.getElementById("ex_plane_loading_time_1").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_loading_time_variation_2": if(val>document.getElementById("ex_plane_loading_time_2").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_loading_time_variation_3": if(val>document.getElementById("ex_plane_loading_time_3").value){wrong(textid);} else{correct(textid);} break;
+						case "ex_plane_loading_time_variation_4": if(val>document.getElementById("ex_plane_loading_time_4").value){wrong(textid);} else{correct(textid);} break;
+				}
+			}
+			else if(textid == "ex_cat3_landing" || textid == "ex_cat3_landing_1" || textid == "ex_cat3_landing_2" || textid == "ex_cat3_landing_3" || textid == "ex_cat3_landing_4")
+			{
+				if(val > 100 || val < 0){wrong(textid);}
+				else{correct(textid);}
+			}
+			else{correct(textid);}
+		}
+	}
 
-		$('.save').click(function(e){ 
-
-			var current_time = 123;
-			var tasktitle = $("input#tasktitle").val();
-			var dataString = 'current_time='+ current_time + '&tasktitle=' + tasktitle;
-				
-			$.ajax({
-      			type: "POST",
-      			url: "save.php",
-      			data: dataString,
-      				
-      				success: function() {
-      					$('.title').html("");
-        				$('#message').html("✓ Logged!")
-        				.hide()
-       				 
-       				 		.fadeIn(1500, function() {
-         			 		$('#message').append("");
-         			 		});
-         				}
-			});
-			return false;
-
-	    });
-	});
+	function correct(textid)
+	{
+		document.getElementById(textid).style.backgroundColor = "#BCED91";
+		if(allCorrect())
+		{
+			document.getElementById("processAllDup").disabled = false;
+		}
+	}
 	
+	function wrong(textid)
+	{
+		if(document.getElementById(textid).value!="")
+		{
+			document.getElementById(textid).style.backgroundColor = "#FFCC00";
+			console.log(document.getElementById(textid).style.backgroundColor);
+		}
+		else
+		{
+			document.getElementById(textid).style.backgroundColor = "white";
+		}
+		document.getElementById("processAllDup").disabled = true;
+	}
 	
-	
-	
+	function allCorrect()
+	{
+		var allCorrect = true;
+		var textbox = document.getElementsByTagName('input');
+		var textid;
+		var bgcolor = "rgb(255, 204, 0)";
+		for(var i=0; i< textbox.length; i++)
+		{	
+			if(textbox[i].value == 0 || textbox[i].style.backgroundColor == bgcolor)
+			{	
+				allCorrect = false;
+				break;
+			}
+		}
+		
+		return allCorrect;
+	}

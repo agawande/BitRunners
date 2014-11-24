@@ -57,59 +57,59 @@ input[type=text] {
 	<h1 class="header">Global Package Courier Tracking</h1>
 	<div class="container" id="timing_params">
 		<div class="caption">Simulation Length (hours)</div>
-		<input type="text" id="sim_time">
+		<input type="text" id="sim_time" placeholder="8765.81" onblur="checkInput(this.id)" />
 	</div>
 	<div class="container" id="weather_params">
 		<h2>Weather</h2>
 		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
-		<input type="text" id="storm_mean">
+		<input type="text" id="storm_mean" placeholder="48" onblur="checkInput(this.id)">
 		<div class="caption">Mean Storm length (hours)</div>
-		<input type="text" id="storm_length">
+		<input type="text" id="storm_length" placeholder="4" onblur="checkInput(this.id)">
 		<div class="caption">Storm length variation (hours)</div>
-		<input type="text" id="storm_variation">
+		<input type="text" id="storm_variation" placeholder="2" onblur="checkInput(this.id)">
 	</div>
 	<div class="container" id="airport_params">
 		<h2>Airport features</h2>
 		<div class="caption">Number of berths</div>
-		<input type="text" id="berth_number">
+		<input type="text" id="berth_number" placeholder="3" onblur="checkInput(this.id)">
 		<div class="caption">Number of taxiways</div>
-		<input type="text" id="taxiway_number">
+		<input type="text" id="taxiway_number" placeholder="1" onblur="checkInput(this.id)">
 		<div class="caption">Taxiway travel time (hours)</div>
-		<input type="text" id="taxiway_travel_time">
+		<input type="text" id="taxiway_travel_time" placeholder="1" onblur="checkInput(this.id)">
 		<div class="caption">De/berthing time (hours)</div>
-		<input type="text" id="deberthing_time">
+		<input type="text" id="deberthing_time" placeholder=".25" onblur="checkInput(this.id)">
 	</div>
 	<div class="container" id="regular_plane_params">
 		<h2>Regular plane parameters</h2>
 		<div class="caption">Arrival rate (hours)</div>
-		<input type="text" id="plane_arrival_rate">
+		<input type="text" id="plane_arrival_rate" placeholder="11" onblur="checkInput(this.id)">
 		<div class="caption">Arrival rate variation (hours)</div>
-		<input type="text" id="plane_arrival_rate_variation">
+		<input type="text" id="plane_arrival_rate_variation" placeholder="7" onblur="checkInput(this.id)">
 		<div class="caption">Loading time (hours)</div>
-		<input type="text" id="plane_loading_time">
+		<input type="text" id="plane_loading_time" placeholder="24" onblur="checkInput(this.id)">
 		<div class="caption">Loading time variation (hours)</div>
-		<input type="text" id="plane_loading_time_variation">
+		<input type="text" id="plane_loading_time_variation" placeholder="4" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
-		<input type="text" id="cat3_landing">
+		<input type="text" id="cat3_landing" placeholder="50" onblur="checkInput(this.id)">
 	</div>
 	<div class="container" id="external_plane_params">
 		<h2>External plane set 1 parameters</h2>
 		<div class="caption">Number of planes</div>
-		<input type="text" id="ex_plane_number" placeholder="ex_plane_number">
+		<input type="text" id="ex_plane_number" placeholder="ex_plane_number" onblur="checkInput(this.id)">
 		<div class="caption">Round trip time (hours)</div>
-		<input type="text" id="ex_plane_rtt" placeholder="ex_plane_rtt">
+		<input type="text" id="ex_plane_rtt" placeholder="ex_plane_rtt" onblur="checkInput(this.id)">
 		<div class="caption">Round trip time variation (hours)</div>
-		<input type="text" id="ex_plane_rtt_variation" placeholder="ex_plane_rtt_variation">
+		<input type="text" id="ex_plane_rtt_variation" placeholder="ex_plane_rtt_variation" onblur="checkInput(this.id)">
 		<div class="caption">Loading time (hours)</div>
-		<input type="text" id="ex_plane_loading_time" placeholder="ex_plane_loading_time">
+		<input type="text" id="ex_plane_loading_time" placeholder="ex_plane_loading_time" onblur="checkInput(this.id)">
 		<div class="caption">Loading time variation (hours)</div>
-		<input type="text" id="ex_plane_loading_time_variation" placeholder="ex_plane_loading_time_variation">
+		<input type="text" id="ex_plane_loading_time_variation" placeholder="ex_plane_loading_time_variation" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
-		<input type="text" id="ex_cat3_landing" placeholder="ex_cat3_landing">
+		<input type="text" id="ex_cat3_landing" placeholder="ex_cat3_landing" onblur="checkInput(this.id)">
 	</div>
 	<input type="button" class="buttonWidth" id="btnAddressAdd" value="Add Worksite Addressess" onClick="addSet()"/>
 
-	<input type="button" id="processAllDup" value="Process" onClick="processAllSets()" />
+	<input type="button" id="processAllDup" value="Process" onClick="processAllSets()" disabled>
 
 	<input type="button" id="delete" value="delete" onClick="deleteSet()" />
 </body>
