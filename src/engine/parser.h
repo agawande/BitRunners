@@ -3,6 +3,6 @@
 
 #include "ADTs/parameters.h"
 
-Parameters* readInputFile(char*);
+Parameters* read_input_file(char*);
 
 #endif
