@@ -40,6 +40,9 @@ typedef struct sParameters{
 	int numXPlaneTypes;
 	//External planes parameters.
 	XPlaneType *xPlaneTypes;
+	//Update parameters.
+	int update_mode;
+	float update_time;
 }Parameters;
 
 #endif

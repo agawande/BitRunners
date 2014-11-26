@@ -4,11 +4,12 @@
 #include "parser.h"
 #include "simulation.h"
 
-#define FILENAME "sample_input"
+#define INPUT_FILENAME "sample_input"
+#define BREAK_FILENAME "_kill"
 #define SLEEP_TIME_US 500*1000
 
-int sim_requested(void){
-	FILE *input = fopen(FILENAME, "r");
+int exists(char *filename){
+	FILE *input = fopen(filename, "r");
 	
 	if (input!=NULL){
 		fclose(input);
@@ -18,15 +19,16 @@ int sim_requested(void){
 }
 
 int main(void){
-	while(1){
-		printf("Poll\n");
-		if (sim_requested()){
-			printf("Request!\n");
-			//Parameters *params = read_input_file(FILENAME);
-			remove(FILENAME);
-			//start_simulation(params);
+	while (!exists(BREAK_FILENAME)){
+		if (exists(INPUT_FILENAME)){
+			Parameters *params = read_input_file(INPUT_FILENAME);
+			remove(INPUT_FILENAME);
+			start_simulation(params);
 			//free(params);
 		}
 		usleep(SLEEP_TIME_US);
 	}
+	printf("Kill requested.\n");
+	remove(BREAK_FILENAME);
+	return 0;
 }

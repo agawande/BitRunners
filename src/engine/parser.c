@@ -147,6 +147,11 @@ Parameters* read_input_file(char *filepath){
 		p = read_next_float(p, &parameters->xPlaneTypes[i].cat3Prob);
 	}
 	
+	p = read_next_int(p, &parameters->update_mode);
+	if (parameters->update_mode){
+		p = read_next_float(p, &parameters->update_time);
+	}
+	
 	free(buffer);
 	
 	return parameters;

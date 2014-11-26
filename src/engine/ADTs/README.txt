@@ -13,6 +13,8 @@ External planes:            (int)\n                                 Number of se
                                 (float) (float)\n                   RTT interval (i, f)
                                 (float) (float)\n                   Loading time interval (i, f)
                                 (float)\n                           Cat3 landing gear probability
+Updates:                    (int)\n                                 Mode (0: per event 1: hourly)
+                            (float)\n                               If hourly, each how many hours
 
 
 Explanation: indentation indicates repetition. Each indented line is repeated as many times
