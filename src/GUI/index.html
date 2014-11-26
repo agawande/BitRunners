@@ -5,14 +5,42 @@
 <script language="javascript" type="text/javascript" src="readAndWrite.js"></script>
 </head>
 <style>
+body,
+html {
+margin:0;
+padding:0;
+color:#000;
+background:#a7a09a;
+}
 
-.header{
-	text-align:center;
-	font-size:30px
+#wrap {
+width:750px;
+margin:0 auto;
+background:#99c;
+}
+
+
+#header {
+background:#ddd;
+}
+#main {
+background:#33CCFF;
+float:left;
+width:500px;
+}
+#sidebar {
+background:#99FF33;
+float:right;
+width:250px;
+}
+
+#sidebar{
+	position:relative;
 }
 
 .container{
 	margin:10px;
+	position:relative;
 }
 
 .caption{
@@ -51,35 +79,22 @@ input[type=text] {
   border-radius: 5;
   height: 20px;
 }
+
+.space{
+padding-left:10px;
+}
+
 </style>
 
 <body>
-	<h1 class="header">Global Package Courier Tracking</h1>
-	<div class="container" id="timing_params">
-		<div class="caption">Simulation Length (hours)</div>
-		<input type="text" id="sim_time" placeholder="8765.81" onblur="checkInput(this.id)" />
+	<div id="wrap">
+	<div id="header"><h1 align="center">Global Package Courier Tracking</h1></div>
+	<div id="control">
+		<a name="top"></a>
+		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" disabled>
 	</div>
-	<div class="container" id="weather_params">
-		<h2>Weather</h2>
-		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
-		<input type="text" id="storm_mean" placeholder="48" onblur="checkInput(this.id)">
-		<div class="caption">Mean Storm length (hours)</div>
-		<input type="text" id="storm_length" placeholder="4" onblur="checkInput(this.id)">
-		<div class="caption">Storm length variation (hours)</div>
-		<input type="text" id="storm_variation" placeholder="2" onblur="checkInput(this.id)">
-	</div>
-	<div class="container" id="airport_params">
-		<h2>Airport features</h2>
-		<div class="caption">Number of berths</div>
-		<input type="text" id="berth_number" placeholder="3" onblur="checkInput(this.id)">
-		<div class="caption">Number of taxiways</div>
-		<input type="text" id="taxiway_number" placeholder="1" onblur="checkInput(this.id)">
-		<div class="caption">Taxiway travel time (hours)</div>
-		<input type="text" id="taxiway_travel_time" placeholder="1" onblur="checkInput(this.id)">
-		<div class="caption">De/berthing time (hours)</div>
-		<input type="text" id="deberthing_time" placeholder=".25" onblur="checkInput(this.id)">
-	</div>
-	<div class="container" id="regular_plane_params">
+	<div id="main">
+	<div class="space">
 		<h2>Regular plane parameters</h2>
 		<div class="caption">Arrival rate (hours)</div>
 		<input type="text" id="plane_arrival_rate" placeholder="11" onblur="checkInput(this.id)">
@@ -91,9 +106,9 @@ input[type=text] {
 		<input type="text" id="plane_loading_time_variation" placeholder="4" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
 		<input type="text" id="cat3_landing" placeholder="50" onblur="checkInput(this.id)">
-	</div>
-	<div class="container" id="external_plane_params">
-		<h2>External plane set 1 parameters</h2>
+		
+		<div class="container" id="external_plane_params">
+		<h2>External plane set 1 parameters  </h2>
 		<div class="caption">Number of planes</div>
 		<input type="text" id="ex_plane_number" placeholder="ex_plane_number" onblur="checkInput(this.id)">
 		<div class="caption">Round trip time (hours)</div>
@@ -106,11 +121,40 @@ input[type=text] {
 		<input type="text" id="ex_plane_loading_time_variation" placeholder="ex_plane_loading_time_variation" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
 		<input type="text" id="ex_cat3_landing" placeholder="ex_cat3_landing" onblur="checkInput(this.id)">
+		</div>
+			<input type="button" class="buttonWidth" id="btnAddressAdd" value="+" onClick="addSet()"/>
+			<input type="button" id="delete" value="--" onClick="deleteSet()" />
+		</div>   <!-- END OF PLANES-->
+	</div>  <!-- END OF MAIN-->
+	<div id="sidebar">
+		<div class="space">
+		<h2>Time</h2>
+		<div class="caption">Simulation Length (hours)</div>
+		<input type="text" id="sim_time" placeholder="8765.81" onblur="checkInput(this.id)" />
+		<hr />
+		
+		<h2>Weather</h2>
+		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
+		<input type="text" id="storm_mean" placeholder="48" onblur="checkInput(this.id)">
+		<div class="caption">Mean Storm length (hours)</div>
+		<input type="text" id="storm_length" placeholder="4" onblur="checkInput(this.id)">
+		<div class="caption">Storm length variation (hours)</div>
+		<input type="text" id="storm_variation" placeholder="2" onblur="checkInput(this.id)">
+		
+		<hr />
+		
+		<h2>Airport features</h2>
+		<div class="caption">Number of berths</div>
+		<input type="text" id="berth_number" placeholder="3" onblur="checkInput(this.id)">
+		<div class="caption">Number of taxiways</div>
+		<input type="text" id="taxiway_number" placeholder="1" onblur="checkInput(this.id)">
+		<div class="caption">Taxiway travel time (hours)</div>
+		<input type="text" id="taxiway_travel_time" placeholder="1" onblur="checkInput(this.id)">
+		<div class="caption">De/berthing time (hours)</div>
+		<input type="text" id="deberthing_time" placeholder=".25" onblur="checkInput(this.id)">
+		<br />
+		
+		</div>  <!--END OF SPACE -->
 	</div>
-	<input type="button" class="buttonWidth" id="btnAddressAdd" value="Add Worksite Addressess" onClick="addSet()"/>
-
-	<input type="button" id="processAllDup" value="Process" onClick="processAllSets()" disabled>
-
-	<input type="button" id="delete" value="delete" onClick="deleteSet()" />
 </body>
 </html>

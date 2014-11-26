@@ -114,10 +114,13 @@
 			$.ajax({
       			type: "POST",
       			url: "save.php",
-      			data: { input: inputString }
+      			data: { input: inputString },
+				success: function(msg) {
+					console.log(msg);
+				}
 			});
 			
-			window.location.href = 'loading.html';
+			window.location.href = 'loading.html'; { input: inputString }
     }
     
     var counter = 0;
@@ -159,19 +162,9 @@
 			{
 				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/)){ wrong(textid); }
 				else{correct(textid);}
-				if(textid == "berth_number")
+				if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
 				{
-					if(val > 10 || val < 3 ){wrong(textid);}
-					else{correct(textid);}
-				}
-				 if(textid == "taxiway_number")
-				{
-					if(val > 10 || val < 1){wrong(textid);}
-					else{correct(textid);}
-				}
-				 if(textid == "ex_plane_number")
-				{
-					if(val > 10 || val < 1){wrong(textid);}
+					if(val == 0){wrong(textid);}
 					else{correct(textid);}
 				}
 			}
@@ -183,7 +176,7 @@
 			}
 			else if(textid == "storm_mean")
 			{
-				if(val > 72 || val < 24 ){wrong(textid);}
+				if(val < 48 ){wrong(textid);}
 				else{correct(textid);}
 			}
 			else if(textid == "storm_length")
@@ -204,17 +197,17 @@
 			}
 			else if(textid == "taxiway_travel_time")
 			{
-				if(val > 4 || val < 0.25){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else{correct(textid);}
 			}
 			else if(textid == "deberthing_time")
 			{
-				if(val >  4 || val < 0.25){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else{correct(textid);}
 			}
 			else if(textid == "plane_arrival_rate")
 			{
-				if(val > 12 || val < 5){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else
 				{
 					correct(textid);
@@ -229,7 +222,7 @@
 			}
 			else if(textid == "plane_loading_time")
 			{
-				if(val > 50 || val < 10){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else
 				{
 					correct(textid);
@@ -250,7 +243,7 @@
 			}
 			else if(textid == "ex_plane_rtt" || textid == "ex_plane_rtt_1" || textid == "ex_plane_rtt_2" || textid == "ex_plane_rtt_3" || textid == "ex_plane_rtt_4")
 			{
-				if(val > 200 || val < 10){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else
 				{
 					correct(textid);
@@ -280,7 +273,7 @@
 			}
 			else if(textid == "ex_plane_loading_time" || textid == "ex_plane_loading_time_1" || textid == "ex_plane_loading_time_2" || textid == "ex_plane_loading_time_3" || textid == "ex_plane_loading_time_4")
 			{
-				if(val > 50 || val < 10){wrong(textid);}
+				if(val == 0){wrong(textid);}
 				else
 				{
 					correct(textid);
@@ -340,18 +333,16 @@
 	
 	function allCorrect()
 	{
-		var allCorrect = true;
 		var textbox = document.getElementsByTagName('input');
 		var textid;
 		var bgcolor = "rgb(255, 204, 0)";
 		for(var i=0; i< textbox.length; i++)
 		{	
-			if(textbox[i].value == 0 || textbox[i].style.backgroundColor == bgcolor)
+			if(textbox[i].value == 0 || textbox[i].style.backgroundColor == bgcolor || textbox[i].style.backgroundColor == "white")
 			{	
-				allCorrect = false;
-				break;
+				return false;
 			}
 		}
 		
-		return allCorrect;
+		return true;
 	}

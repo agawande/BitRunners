@@ -5,14 +5,44 @@
 </head>
 <script>
 
+	var timer;
+	
+	var stop = true;
+	var str = "";
+
+function poll()
+{
+	
+	$.get("pollFile.php", function(data)	{
+					console.log("hello: " + data);
+					
+					if(data != "waiting")
+					{
+						str = data.split("\n");
+						if(str[0]=="results")
+						{
+							//finalResults();
+							console.log("done");
+							stop = false;
+							console.log(stop);
+							clearTimeout(timer);
+						}
+						else
+						{
+							//update();
+						}
+					}
+	});
+	timer = setTimeout(function(){poll();}, 500);
+}
+
 $( document ).ready(function() {
     console.log( "ready!" );
-		$.ajax({
-      			type: "POST",
-      			url: "pollFile.php",
-			});
+		poll();		
 });
 
 </script>
-
+<body><div id="loading">
+  <p><img src="loading.gif" /> Please Wait</p>
+</div></body>
 </html>

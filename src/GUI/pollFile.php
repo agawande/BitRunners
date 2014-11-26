@@ -1,15 +1,25 @@
 <?php
 
-$f = fopen("results.txt", "w");
-$i = 0;
-while ($i < 2)
+$results = "results.txt";
+$current = "current.txt";
+$data = "waiting";
+
+if(file_exists($results) || file_exists($current))
 {
-	if(filesize("results.txt") != 0)
-	{
-		fwrite($f, "success polls");
+	if(file_exists($results))
+	{		
+		$data = "results".file_get_contents($results);
 	}
-	fwrite($f, "success polls");
-	sleep(10);
-	$i+=1;
+	else
+	{
+		$data = file_get_contents($current);
+		unlink($current);
+		$myfile = fopen("acknowledged", "w");
+	}
+	echo $data;
+}
+else
+{
+	echo "waiting";
 }
 ?>
