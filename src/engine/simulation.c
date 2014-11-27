@@ -6,9 +6,9 @@
 #include "ADTs/berth.h"
 #include "ADTs/taxiway.h"
 #include "ADTs/plane.h"
-#include "ADTs/sim_state.h"
 #include "simlib/simlib.h"
 #include "parser.h"
+#include "sim_io.h"
 	 
 //Events
 #define EVENT_PLANE_ARRIVAL 0
@@ -382,16 +382,8 @@ void write_update(){
 	fprintf(update, "%d/%d\n", u_taxiways, params->numTaxiways);
 	//Berths
 	fprintf(update, "%d/%d\n", u_berths, params->numBerths);
-}
-
-int exists(char *filename){
-	FILE *input = fopen(filename, "r");
 	
-	if (input!=NULL){
-		fclose(input);
-		return 1;
-	}
-	return 0;
+	fclose(update);
 }
 
 void wait_for_ack(){
@@ -465,7 +457,7 @@ int start_simulation(Parameters *p){
 		
 		//If the user wants time-based updates
 		if (params->update_mode){
-			if (params->update_time/(update*sim_time)){
+			if ((int)(sim_time/(update*params->update_time))){
 				write_update();
 				wait_for_ack();
 				update++;
