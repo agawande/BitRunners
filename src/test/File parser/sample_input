@@ -13,3 +13,5 @@
 40 40			//RTT interval (two)
 7 7				//Loading interval (two)
 60				//Cat three (two)
+1				//Mode (hourly)
+5				//Each five hours

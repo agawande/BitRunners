@@ -1,14 +1,9 @@
 #include <stdio.h>
-#include <string>
 #include "../../engine/ADTs/parameters.h"
-#include "../../engine/parser.hpp"
-
-using namespace std;
+#include "../../engine/parser.h"
 
 int main(void){
-	string input = "sample_input";
-	Parameters *params = readInputFile(const_cast<char*>(input.c_str()));
-	printf("get here\n");
+	Parameters *params = read_input_file("sample_input");
 	int i;
 	
 	printf("Sim time: %.2f\n\n", params->simLength);
@@ -32,6 +27,11 @@ int main(void){
 		printf("\tRTT interval: %.2f-%.2f\n", params->xPlaneTypes[i].RTT_i, params->xPlaneTypes[i].RTT_f);
 		printf("\tLoading interval: %.2f-%.2f\n", params->xPlaneTypes[i].loading_i, params->xPlaneTypes[i].loading_f);
 		printf("\tCat3 probability: %.2f\n\n", params->xPlaneTypes[i].cat3Prob);
+	}
+	
+	printf("Mode: %d\n", params->update_mode);
+	if (params->update_mode){
+		printf("Time: %.2f hours\n\n", params->update_time);
 	}
 	
 	return 0;

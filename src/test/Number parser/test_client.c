@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "parser_test.h"
 
-using namespace std;
-
 int main(){
 	//Int test
 	//File is opened

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-g++ ../../engine/parser.cpp test_client.cpp -o test
+gcc ../../engine/parser.c test_client.c -o test
 
 echo "File parser test built"
