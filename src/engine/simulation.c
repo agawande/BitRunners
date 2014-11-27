@@ -30,6 +30,8 @@
 
 //IO
 #define UPDATE_FILENAME "update"
+#define RESULTS_FILENAME "results"
+#define ACK_FILENAME "_acknowledged"
 
 //Global variables suck, but still...
 Parameters *params;
@@ -43,6 +45,8 @@ taxiway_t **taxiways;
 int planes_size, num_x_planes;
 plane_t **planes;
 plane_t *fx_stat;
+
+int update;
 
 void enqueue(int);
 void dequeue(int);
@@ -110,6 +114,8 @@ void initialisation(){
 	float time = expon(params->stormMean, 1);
 	add_event(EVENT_STORM_IN, time);
 	add_event(EVENT_STORM_OUT, uniform(time+params->storm_i, time+params->storm_f, 0));
+	
+	update=1;
 }
 
 void increment_planes_size(int increment){
@@ -363,7 +369,7 @@ void write_update(){
 	}
 	
 	//Current simulation time
-	fprintf(update, "%.2f\n", sim_time);
+	fprintf(update, "%.2f/%.2f\n", sim_time, params->simLength);
 	//Arrivals and landings
 	fprintf(update, "%d\n%d\n", arrivals, landings);
 	//Weather (0: clear, other: storm)
@@ -373,7 +379,26 @@ void write_update(){
 	//Queues status (runway, berth)
 	fprintf(update, "%d\n%d\n", list_size[RUNWAY_QUEUE], list_size[BERTH_QUEUE]);
 	//Taxiways
-	fprintf(update, "%d\n%d", u_taxiways, u_berths);
+	fprintf(update, "%d/%d\n", u_taxiways, params->numTaxiways);
+	//Berths
+	fprintf(update, "%d/%d\n", u_berths, params->numBerths);
+}
+
+int exists(char *filename){
+	FILE *input = fopen(filename, "r");
+	
+	if (input!=NULL){
+		fclose(input);
+		return 1;
+	}
+	return 0;
+}
+
+void wait_for_ack(){
+	while (!exists(ACK_FILENAME)){
+		usleep(100*1000); //100 milliseconds
+	}
+	remove(ACK_FILENAME);
 }
 
 int start_simulation(Parameters *p){
@@ -434,13 +459,22 @@ int start_simulation(Parameters *p){
 				break;
 		}
 		
-		//queues_status();
-		
 		//Berth and taxiway availability are checked to see if something can be dequeued
 		dequeue(BERTH_QUEUE);
 		dequeue(RUNWAY_QUEUE);
 		
-		//facilities_status();
+		//If the user wants time-based updates
+		if (params->update_mode){
+			if (params->update_time/(update*sim_time)){
+				write_update();
+				wait_for_ack();
+				update++;
+			}
+		}
+		else{
+			write_update();
+			wait_for_ack();
+		}
 	}
 	while (next_event_type!=EVENT_SIM_END);
 	
