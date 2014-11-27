@@ -366,7 +366,7 @@ void write_update(){
 		if (is_berth_occupied(berths[i])){
 			u_berths++;
 		}
-		else if (is_berth_resered(berths[i])){
+		else if (is_berth_reserved(berths[i])){
 			r_berths++;
 		}
 	}
