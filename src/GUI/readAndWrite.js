@@ -11,18 +11,11 @@
 	});*/
 	
 	function addSet(){
-	    if(counter<5)
-		{
 			var sourceNode = document.getElementById("external_plane_params");
 			var node = duplicateNode(sourceNode, ["id", "name", "placeholder"]);
-			console.log(node);
+			//console.log(node);
 			sourceNode.parentNode.appendChild(node);
-			console.log("Hello");
-			if(counter==4)
-			{
-				document.getElementById("btnAddressAdd").disabled=true;
-			}
-		}
+			//console.log("Hello");
 	}
 	
 	function deleteSet(){
@@ -32,7 +25,7 @@
 				var parent = document.getElementById(node);
 				parent.parentNode.removeChild(parent);
 				counter--;
-				if(counter<4) {document.getElementById("btnAddressAdd").disabled=false;}
+				//if(counter<4) {document.getElementById("btnAddressAdd").disabled=false;}
 				//console.log(parent);
 				//var child = document.getElementById("college_"+counter);
 				//child.parentNode.removeChild(child);
@@ -41,7 +34,7 @@
 	
     
     function processAllSets () {
-        console.log("Yay");
+        //console.log("Yay");
 		 //Sim Time
 		simTime = parseFloat(document.getElementById("sim_time").value);
 		
@@ -134,7 +127,7 @@
 				}
 				
 			}  //end of inner for
-			console.log(str);
+			//console.log(str);
 			ex_str += str + "\n";
 			str="";
 		} // end of outer for
@@ -190,14 +183,13 @@
 		}
 		else
 		{
-		        if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
+		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
 			{
-				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/)){ wrong(textid); }
+				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){ wrong(textid); }
 				else{correct(textid);}
 			}
 			else if(textid == "sim_time")
 			{
-				console.log('rect');
 				if(val > 87658.1 || val < 720){wrong(textid);}
 				else{correct(textid);}
 			}
@@ -218,8 +210,12 @@
 			}
 			else if(textid == "storm_variation")
 			{
-				console.log(val + "     " + document.getElementById("storm_length").value);
 				if(val>parseFloat(document.getElementById("storm_length").value)) {wrong(textid);}
+				else{correct(textid);}
+			}
+			else if(textid == "taxiway_travel_time" || textid == "deberthing_time")
+			{
+				if(val == 0){wrong(textid);}
 				else{correct(textid);}
 			}
 			else if(textid == "plane_arrival_rate")
@@ -228,7 +224,7 @@
 				else
 				{
 					correct(textid);
-					if(val>=parseFloat(document.getElementById("plane_arrival_rate_variation").value) && parseFloat(document.getElementById("plane_arrival_rate_variation").value)!=0) {correct("plane_arrival_rate_variation");}
+					if(val>=parseFloat(document.getElementById("plane_arrival_rate_variation").value)) {correct("plane_arrival_rate_variation");}
 					else{wrong("plane_arrival_rate_variation");}
 				}
 			}
@@ -243,13 +239,13 @@
 				else
 				{
 					correct(textid);
-					if(val>=document.getElementById("plane_loading_time_variation").value && document.getElementById("plane_loading_time_variation").value!=0){correct("plane_loading_time_variation");}
+					if(val>=document.getElementById("plane_loading_time_variation").value){correct("plane_loading_time_variation");}
 					else{wrong("plane_loading_time_variation");}
 				}
 			}
 			else if(textid == "plane_loading_time_variation")
 			{
-				console.log(val + "  >  " + document.getElementById("plane_loading_time").value);
+				//console.log(val + "  >  " + document.getElementById("plane_loading_time").value);
 				if(val>document.getElementById("plane_loading_time").value){wrong(textid);}
 				else{correct(textid);}
 			}
@@ -258,62 +254,66 @@
 				if(val > 100 || val < 0){wrong(textid);}
 				else{correct(textid);}
 			}
-			else if(textid == "ex_plane_rtt" || textid == "ex_plane_rtt_1" || textid == "ex_plane_rtt_2" || textid == "ex_plane_rtt_3" || textid == "ex_plane_rtt_4")
+			else if(textid.indexOf("ex_plane_rtt") != -1)
 			{
-				if(val == 0){wrong(textid);}
-				else
+				if(textid.indexOf("variation") == -1)
 				{
-					correct(textid);
-					switch(textid)
+					var l =  textid.charAt(13);
+					if(val==0){wrong(textid);}
+					else{correct(textid);}
+					if(l=="")
 					{
-						case "ex_plane_rtt": if(val>=document.getElementById("ex_plane_rtt_variation").value && document.getElementById("ex_plane_rtt_variation").value!=0){correct("ex_plane_rtt_variation");} else{wrong(("ex_plane_rtt_variation"))} break;
-						case "ex_plane_rtt_1": if(val>=document.getElementById("ex_plane_rtt_variation_1").value && document.getElementById("ex_plane_rtt_variation_1").value!=0){correct("ex_plane_rtt_variation_1");} else{wrong(("ex_plane_rtt_variation_1"))} break;
-						case "ex_plane_rtt_2": if(val>=document.getElementById("ex_plane_rtt_variation_2").value && document.getElementById("ex_plane_rtt_variation_2").value!=0){correct("ex_plane_rtt_variation_2");} else{wrong(("ex_plane_rtt_variation_2"))} break;
-						case "ex_plane_rtt_3": if(val>=document.getElementById("ex_plane_rtt_variation_3").value && document.getElementById("ex_plane_rtt_variation_3").value!=0){correct("ex_plane_rtt_variation_3");} else{wrong(("ex_plane_rtt_variation_3"))} break;
-						case "ex_plane_rtt_4": if(val>=document.getElementById("ex_plane_rtt_variation_4").value && document.getElementById("ex_plane_rtt_variation_4").value!=0){correct("ex_plane_rtt_variation_4");} else{wrong(("ex_plane_rtt_variation_4"))} break;
-						default: break;
+						if(val>=document.getElementById("ex_plane_rtt_variation").value && document.getElementById("ex_plane_rtt_variation").value!=""){correct("ex_plane_rtt_variation");} else{wrong(("ex_plane_rtt_variation"))}
 					}
-					
+					else
+					{
+						if(val>=document.getElementById("ex_plane_rtt_variation_"+l).value && document.getElementById("ex_plane_rtt_variation_"+l).value!=""){correct("ex_plane_rtt_variation_"+l);}
+						else{wrong(("ex_plane_rtt_variation_"+l))}
+					}
 				}
-			}
-			else if(textid == "ex_plane_rtt_variation" || textid == "ex_plane_rtt_variation_1" || textid == "ex_plane_rtt_variation_2" || textid == "ex_plane_rtt_variation_3" || textid == "ex_plane_rtt_variation_4")
-			{						
-			    console.log(val > document.getElementById("ex_plane_rtt").value);
-				switch(textid)
-				{
-						case "ex_plane_rtt_variation": if(val>document.getElementById("ex_plane_rtt").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_rtt_variation_1": if(val>document.getElementById("ex_plane_rtt_1").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_rtt_variation_2": if(val>document.getElementById("ex_plane_rtt_2").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_rtt_variation_3": if(val>document.getElementById("ex_plane_rtt_3").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_rtt_variation_4": if(val>document.getElementById("ex_plane_rtt_4").value){wrong(textid);} else{correct(textid);} break;
-				}				
-			}
-			else if(textid == "ex_plane_loading_time" || textid == "ex_plane_loading_time_1" || textid == "ex_plane_loading_time_2" || textid == "ex_plane_loading_time_3" || textid == "ex_plane_loading_time_4")
-			{
-				if(val == 0){wrong(textid);}
 				else
 				{
-					correct(textid);
-					switch(textid)
+					var l =  textid.charAt(23);
+					if(l == "")
 					{
-						case "ex_plane_loading_time": if(val>=document.getElementById("ex_plane_loading_time_variation").value && document.getElementById("ex_plane_loading_time_variation").value!=0){correct("ex_plane_loading_time_variation");}  else{wrong("ex_plane_loading_time_variation");} break;
-						case "ex_plane_loading_time_1": if(val>=document.getElementById("ex_plane_loading_time_variation_1").value && document.getElementById("ex_plane_loading_time_variation_1").value!=0){correct("ex_plane_loading_time_variation_1");} else{wrong("ex_plane_loading_time_variation_1");} break;
-						case "ex_plane_loading_time_2": if(val>=document.getElementById("ex_plane_loading_time_variation_2").value && document.getElementById("ex_plane_loading_time_variation_2").value!=0){correct("ex_plane_loading_time_variation_2");} else{wrong("ex_plane_loading_time_variation_2");} break;
-						case "ex_plane_loading_time_3": if(val>=document.getElementById("ex_plane_loading_time_variation_3").value && document.getElementById("ex_plane_loading_time_variation_3").value!=0){correct("ex_plane_loading_time_variation_3");} else{wrong("ex_plane_loading_time_variation_3");} break;
-						case "ex_plane_loading_time_4": if(val>=document.getElementById("ex_plane_loading_time_variation_4").value && document.getElementById("ex_plane_loading_time_variation_4").value!=0){correct("ex_plane_loading_time_variation_4");} else{wrong("ex_plane_loading_time_variation_4");} break;
+						if(val>document.getElementById("ex_plane_rtt").value && document.getElementById("ex_plane_rtt").value!=0){wrong(textid);} 
+						else{correct(textid);}
+					}
+					else
+					{
+						if(val>document.getElementById("ex_plane_rtt_"+l).value && document.getElementById("ex_plane_rtt_"+l).value!=0){wrong(textid);}
+						else{correct(textid);}
 					}
 				}
 			}
-			else if(textid == "ex_plane_loading_time_variation" || textid == "ex_plane_loading_time_variation_1" || textid == "ex_plane_loading_time_variation_2" || textid == "ex_plane_loading_time_variation_3" || textid == "ex_plane_loading_time_variation_4")
+			else if(textid.indexOf("ex_plane_loading_time") != -1)
 			{
-				switch(textid)
+				if(textid.indexOf("variation") == -1)
 				{
-						
-						case "ex_plane_loading_time_variation": if(val>document.getElementById("ex_plane_loading_time").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_loading_time_variation_1": if(val>document.getElementById("ex_plane_loading_time_1").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_loading_time_variation_2": if(val>document.getElementById("ex_plane_loading_time_2").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_loading_time_variation_3": if(val>document.getElementById("ex_plane_loading_time_3").value){wrong(textid);} else{correct(textid);} break;
-						case "ex_plane_loading_time_variation_4": if(val>document.getElementById("ex_plane_loading_time_4").value){wrong(textid);} else{correct(textid);} break;
+					var l =  textid.charAt(22);
+					if(val==0){wrong(textid);}
+					else{correct(textid);}
+					if(l=="")
+					{
+						if(val>=document.getElementById("ex_plane_loading_time_variation").value && document.getElementById("ex_plane_loading_time_variation").value!=""){correct("ex_plane_loading_time_variation");} else{wrong(("ex_plane_loading_time_variation"))}
+					}
+					else
+					{
+						if(val>=document.getElementById("ex_plane_loading_time_variation_"+l).value && document.getElementById("ex_plane_loading_time_variation_"+l).value!=""){correct("ex_plane_loading_time_variation_"+l);} else{wrong(("ex_plane_loading_time_variation_"+l))}
+					}
+				}
+				else
+				{
+					var l =  textid.charAt(32);
+					if(l == "")
+					{
+						if(val>document.getElementById("ex_plane_loading_time").value && document.getElementById("ex_plane_loading_time").value!=0){wrong(textid);} 
+						else{correct(textid);}
+					}
+					else
+					{
+						if(val>document.getElementById("ex_plane_loading_time_"+l).value && document.getElementById("ex_plane_loading_time_"+l).value!=0){wrong(textid);} else{correct(textid);}
+					}
 				}
 			}
 			else if(textid == "ex_cat3_landing" || textid == "ex_cat3_landing_1" || textid == "ex_cat3_landing_2" || textid == "ex_cat3_landing_3" || textid == "ex_cat3_landing_4")
@@ -339,7 +339,7 @@
 		if(document.getElementById(textid).value!="")
 		{
 			document.getElementById(textid).style.backgroundColor = "#FFCC00";
-			console.log(document.getElementById(textid).style.backgroundColor);
+			//console.log(document.getElementById(textid).style.backgroundColor);
 		}
 		else
 		{
@@ -347,7 +347,7 @@
 		}
 		document.getElementById("processAllDup").disabled = true;
 	}
-	
+
 	function allCorrect()
 	{
 		var textbox = document.getElementsByTagName('input');
