@@ -5,10 +5,10 @@
 	var inputString = "";
 	var simTime="aaaa";
 	
-	alert('Javascript file is opened!');
+	/*alert('Javascript file is opened!');
 	$(function() {
       alert('Jquery file is working');
-	});
+	});*/
 	
 	function addSet(){
 	    if(counter<5)
@@ -46,9 +46,9 @@
 		simTime = parseFloat(document.getElementById("sim_time").value);
 		
 		//Weather set
-		var stormMean = 	parseFloat(document.getElementById("storm_mean").value);
-		var stormLow = parseFloat(document.getElementById("storm_length").value) + parseFloat(document.getElementById("storm_variation").value)/2;
-		var stormHigh = parseFloat(document.getElementById("storm_length").value) - parseFloat((document.getElementById("storm_variation").value)/2);
+		var stormMean = parseFloat(document.getElementById("storm_mean").value);
+		var stormLow = parseFloat(document.getElementById("storm_length").value) + parseFloat(document.getElementById("storm_variation").value);
+		var stormHigh = parseFloat(document.getElementById("storm_length").value) - parseFloat((document.getElementById("storm_variation").value));
 		
 		var weather = stormMean+" "+stormLow+" "+stormHigh;   
 		
@@ -62,12 +62,12 @@
 		
 	    //Regular plane
 		var planeArrivalRate = parseFloat(document.getElementById("plane_arrival_rate").value);
-		var planeArrivalLow = planeArrivalRate + parseFloat(document.getElementById("plane_arrival_rate_variation").value)/2;
-		var planeArrivalHigh = planeArrivalRate - parseFloat(document.getElementById("plane_arrival_rate_variation").value)/2;
+		var planeArrivalLow = planeArrivalRate + parseFloat(document.getElementById("plane_arrival_rate_variation").value);
+		var planeArrivalHigh = planeArrivalRate - parseFloat(document.getElementById("plane_arrival_rate_variation").value);
 		
 		var planeLoadingTime = parseFloat(document.getElementById("plane_loading_time").value);
-		var loadingTimeLow = planeLoadingTime + parseFloat(document.getElementById("plane_loading_time_variation").value)/2;
-		var loadingTimeHigh = planeLoadingTime - parseFloat(document.getElementById("plane_loading_time_variation").value)/2;
+		var loadingTimeLow = planeLoadingTime + parseFloat(document.getElementById("plane_loading_time_variation").value);
+		var loadingTimeHigh = planeLoadingTime - parseFloat(document.getElementById("plane_loading_time_variation").value);
 		
 		var cat3 = document.getElementById("cat3_landing").value;
 		
@@ -79,7 +79,7 @@
 		var ex_str="";
 		
 		for (var i = 0; i <= counter; i++) 
-		{			
+		{
 			for(var j=0; j < noOfFields; j++)
 			{
 				switch(j) 
@@ -95,20 +95,52 @@
 				if(i == 0)
 				{
 					fieldValue = document.getElementById(field);
+					if(field == "ex_plane_rtt")
+					{
+						str+=(parseFloat(fieldValue.value) + parseFloat(document.getElementById("ex_plane_rtt_variation").value)) + " ";
+						str+=(parseFloat(fieldValue.value) - parseFloat(document.getElementById("ex_plane_rtt_variation").value)) + " ";
+						j+=1;
+					}
+					else if (field == "ex_plane_loading_time")
+					{
+					 str+=(parseFloat(fieldValue.value) + parseFloat(document.getElementById("ex_plane_loading_time_variation").value)) + " ";
+					 str+=(parseFloat(fieldValue.value) - parseFloat(document.getElementById("ex_plane_loading_time_variation").value)) + " ";
+					 j+=1;
+					}
+					else
+					{
+						str+=fieldValue.value+" ";
+					}
 				}
 				else
 				{
 					fieldValue = document.getElementById(field+"_" + i);
-				}	
-				str+=fieldValue.value+" ";
+					if(field == ("ex_plane_rtt_"+i))
+					{
+						str+=(parseFloat(fieldValue.value) + parseFloat(document.getElementById("ex_plane_rtt_variation_"+i).value))+" ";
+						str+=(parseFloat(fieldValue.value) - parseFloat(document.getElementById("ex_plane_rtt_variation_"+i).value))+" ";
+						j+=1;
+					}
+					else if(field == ("ex_plane_loading_time_"+i))
+					{
+						str+=(parseFloat(fieldValue.value) + parseFloat(document.getElementById("ex_plane_loading_time_variation_"+i).value))+" ";
+						str+=(parseFloat(fieldValue.value) - parseFloat(document.getElementById("ex_plane_loading_time_variation_"+i).value))+" ";
+						j+=1;
+					}
+					else
+					{
+						str+=fieldValue.value+" ";
+					}
+				}
+				
 			}  //end of inner for
-			//console.log(str);
+			console.log(str);
 			ex_str += str + "\n";
 			str="";
 		} // end of outer for
 		//console.log(ex_str);
 		//console.log(simTime);
-		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + ex_str;
+		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str + "1\n1000";
 		console.log(inputString);
 		
 			$.ajax({
@@ -116,11 +148,11 @@
       			url: "save.php",
       			data: { input: inputString },
 				success: function(msg) {
-					console.log(msg);
+					console.log("msg" + msg);
 				}
 			});
 			
-			window.location.href = 'loading.html'; { input: inputString }
+			//window.location.href = 'loading.html'; { input: inputString }
     }
     
     var counter = 0;
@@ -158,15 +190,10 @@
 		}
 		else
 		{
-		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
+		        if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
 			{
 				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/)){ wrong(textid); }
 				else{correct(textid);}
-				if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
-				{
-					if(val == 0){wrong(textid);}
-					else{correct(textid);}
-				}
 			}
 			else if(textid == "sim_time")
 			{
@@ -193,16 +220,6 @@
 			{
 				console.log(val + "     " + document.getElementById("storm_length").value);
 				if(val>parseFloat(document.getElementById("storm_length").value)) {wrong(textid);}
-				else{correct(textid);}
-			}
-			else if(textid == "taxiway_travel_time")
-			{
-				if(val == 0){wrong(textid);}
-				else{correct(textid);}
-			}
-			else if(textid == "deberthing_time")
-			{
-				if(val == 0){wrong(textid);}
 				else{correct(textid);}
 			}
 			else if(textid == "plane_arrival_rate")
