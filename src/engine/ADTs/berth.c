@@ -39,6 +39,14 @@ int free_berth(berth_t *berth, float time){
 	return 0;
 }
 
+int is_berth_occupied(berth_t *berth){
+	return berth->status==occupied;
+}
+
+int is_berth_reserved(berth_t *berth){
+	return berth->status==reserved;
+}
+
 int is_berth_empty(berth_t *berth){
 	return berth->status==empty;
 }

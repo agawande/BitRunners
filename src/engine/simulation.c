@@ -351,7 +351,7 @@ void departure(void){
 void write_update(){
 	FILE *update = fopen(UPDATE_FILENAME, "w");
 	
-	int i, num_planes, u_taxiways, u_berths;
+	int i, num_planes, u_taxiways, u_berths, r_berths;
 	for (i=0, num_planes=0; i<planes_size; i++){
 		if (planes[i]!=NULL){
 			num_planes++;
@@ -362,9 +362,12 @@ void write_update(){
 			u_taxiways++;
 		}
 	}
-	for (i=0, u_berths=0; i<params->numBerths; i++){
-		if (!is_berth_empty(berths[i])){
+	for (i=0, u_berths=0, r_berths=0; i<params->numBerths; i++){
+		if (is_berth_occupied(berths[i])){
 			u_berths++;
+		}
+		else if (is_berth_resered(berths[i])){
+			r_berths++;
 		}
 	}
 	
@@ -380,8 +383,10 @@ void write_update(){
 	fprintf(update, "%d\n%d\n", list_size[RUNWAY_QUEUE], list_size[BERTH_QUEUE]);
 	//Taxiways
 	fprintf(update, "%d/%d\n", u_taxiways, params->numTaxiways);
-	//Berths
+	//Berths used
 	fprintf(update, "%d/%d\n", u_berths, params->numBerths);
+	//Berths reserved
+	fprintf(update, "%d/%d\n", r_berths, params->numBerths);
 	
 	fclose(update);
 }
