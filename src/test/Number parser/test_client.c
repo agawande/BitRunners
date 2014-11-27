@@ -1,8 +1,6 @@
-#include <iostream>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "parser_test.hpp"
+#include "parser_test.h"
 
 using namespace std;
 
@@ -29,15 +27,13 @@ int main(){
 	//close the file
 	fclose(file);
 	
-	cout << "String read:" << endl << buffer << endl << "Parsed integers:" << endl;
+	printf("String read: %s\nParsed integers:", buffer);
 	
 	int integer;
 	char *pc = buffer;
-	while ((pc = readNextInt(pc, &integer)) != NULL){
-		cout << integer << endl;
+	while ((pc = read_next_int(pc, &integer)) != NULL){
+		printf(" %d", integer);
 	}
-	
-	cout << endl;
 	
 	free(buffer);
 	
@@ -63,15 +59,15 @@ int main(){
 	//close the file
 	fclose(file);
 	
-	cout << "String read:" << endl << buffer << endl << "Parsed floats:" << endl;
+	printf("\n\nString read: %s\nParsed floats:", buffer);
 	
 	float floatingpoint;
 	pc = buffer;
-	while ((pc = readNextFloat(pc, &floatingpoint)) != NULL){
-		cout << floatingpoint << endl;
+	while ((pc = read_next_float(pc, &floatingpoint)) != NULL){
+		printf(" %.2f", floatingpoint);
 	}
 	
-	cout << endl;
+	printf("\n\n");
 	
 	free(buffer);
 	return 0;
