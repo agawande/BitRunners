@@ -16,7 +16,7 @@
 function poll()
 {
 	
-	$.get("pollFile.php", function(data)	{
+	$.get("php/pollFile.php", function(data)	{
 					console.log(data);
 					
 					if(data != "waiting")
@@ -48,11 +48,11 @@ function update(str)
 	document.getElementById("weather").innerHTML = "Weather (" + str[4] + "storms so far)";
 	if(str[3]=="0")
 	{
-		document.getElementById("wimage").src = "sun.jpeg";
+		document.getElementById("wimage").src = "media/sun.jpeg";
 	}
 	else
 	{
-		document.getElementById("wimage").src = "storm.jpeg";
+		document.getElementById("wimage").src = "media/storm.jpeg";
 	}
 	document.getElementById("planes_at_airport").innerHTML = str[5]+ " planes at the airport.";
 	document.getElementById("runway_queue").innerHTML = str[6] + " planes in the runway queue.";

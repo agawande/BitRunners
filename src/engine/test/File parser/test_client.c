@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../../engine/ADTs/parameters.h"
-#include "../../engine/parser.h"
+#include "../../ADTs/parameters.h"
+#include "../../parser.h"
 
 int main(void){
 	Parameters *params = read_input_file("sample_input");

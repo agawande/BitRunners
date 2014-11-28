@@ -138,7 +138,7 @@
 		
 			$.ajax({
       			type: "POST",
-      			url: "save.php",
+      			url: "php/save.php",
       			data: { input: inputString },
 				success: function(msg) {
 					console.log("msg" + msg);

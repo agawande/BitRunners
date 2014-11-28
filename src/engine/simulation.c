@@ -349,8 +349,6 @@ void departure(void){
 }
 
 void write_update(){
-	FILE *update = fopen(UPDATE_FILENAME, "w");
-	
 	int i, num_planes, u_taxiways, u_berths, r_berths;
 	for (i=0, num_planes=0; i<planes_size; i++){
 		if (planes[i]!=NULL){
@@ -370,6 +368,8 @@ void write_update(){
 			r_berths++;
 		}
 	}
+	
+	FILE *update = fopen(UPDATE_FILENAME, "w");
 	
 	//Current simulation time
 	fprintf(update, "%.2f/%.2f\n", sim_time, params->simLength);
@@ -391,11 +391,25 @@ void write_update(){
 	fclose(update);
 }
 
+void write_result(){
+	FILE *file = 
+	//Total sim time
+	//Arrivals, landings
+	//Berths stats
+	//Taxiway stats
+	//Fx plane stats
+	//Per set stats
+	//Grand-total?
+}
+
 void wait_for_ack(){
+	int polls=0;
 	while (!exists(ACK_FILENAME)){
 		usleep(100*1000); //100 milliseconds
+		polls++;
 	}
 	remove(ACK_FILENAME);
+	usleep(polls<10?(500-polls*100)*1000:0);
 }
 
 int start_simulation(Parameters *p){
