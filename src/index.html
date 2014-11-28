@@ -88,9 +88,12 @@ padding-left:10px;
 
 <body>
 	<div id="wrap">
-	<div id="header"><img src="media/header.png" width="750" height="75px"></div>
+	<div id="header"><img src="header.png" width="750" height="75px"></div>
 	<div id="control">
 		<a name="top"></a>
+		<input type="radio" name="update_mode" id="time" value="Time"  onclick="checkRadio(this.id);" checked/>Time
+		<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
+		<input type="text" id="updates" placeholder="5" onblur="checkInput(this.id)">
 		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" disabled>
 	</div>
 	<div id="main">
@@ -153,7 +156,6 @@ padding-left:10px;
 		<div class="caption">De/berthing time (hours)</div>
 		<input type="text" id="deberthing_time" placeholder=".25" onblur="checkInput(this.id)">
 		<br />
-		
 		</div>  <!--END OF SPACE -->
 	</div>
 </body>
