@@ -2,6 +2,9 @@
 <head>
 <title>Simulation GUI</title>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+      <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 </head>
 <script>
 
@@ -14,14 +17,13 @@ function poll()
 {
 	
 	$.get("pollFile.php", function(data)	{
-					console.log("hello: " + data);
+					console.log(data);
 					
 					if(data != "waiting")
 					{
 						str = data.split("\n");
 						if(str[0]=="results")
 						{
-							//finalResults();
 							console.log("done");
 							stop = false;
 							console.log(stop);
@@ -29,20 +31,55 @@ function poll()
 						}
 						else
 						{
-							//update();
+							update(str);
 						}
 					}
 	});
 	timer = setTimeout(function(){poll();}, 500);
 }
 
-$( document ).ready(function() {
+function update(str)
+{
+	document.getElementById("sim_time").innerHTML = "Time: "+str[0];
+	var simP = str[0].split("/");
+	var percent = 100*(parseFloat(simP[0])/parseFloat(simP[1]));
+	$( "#simProgress" ).progressbar({value: percent});
+	document.getElementById("arrivals").innerHTML = str[1] + " Arrivals, "+ str[2] + " Landings";
+	document.getElementById("weather").innerHTML = "Weather (" + str[4] + "storms so far)";
+	if(str[3]=="0")
+	{
+		document.getElementById("wimage").src = "sun.jpeg";
+	}
+	else
+	{
+		document.getElementById("wimage").src = "storm.jpeg";
+	}
+	document.getElementById("planes_at_airport").innerHTML = str[5]+ " planes at the airport.";
+	document.getElementById("runway_queue").innerHTML = str[6] + " planes in the runway queue.";
+	document.getElementById("berthing_queue").innerHTML =str[7] + " planes in the berth queue.";
+	document.getElementById("used_taxiways").innerHTML = str[8] + " taxiways used.";
+	document.getElementById("used_berths").innerHTML =str[9] + " berths used.";
+	document.getElementById("reserved_berths").innerHTML = str[10] + " berths reserved.";
+}
+
+$(document).ready(function() {
     console.log( "ready!" );
-		poll();		
+
+		poll();
 });
 
 </script>
-<body><div id="loading">
-  <p><img src="loading.gif" /> Please Wait</p>
-</div></body>
+<body>
+<p id="sim_time" align="center">0</p><div id="simProgress"></div>
+<p id="weather" align="center">0</p>
+<img id="wimage" src="sun.jpeg" style="margin-left:auto; margin-right:auto; display:block;" width="100px" height="100px"/> <br />
+<p id="arrivals" align="center">0</p>
+
+<p id="planes_at_airport" align="center">0</p>
+<p id="runway_queue" align="center">0</p>
+<p id="berthing_queue" align="center">0</p>
+<p id="used_taxiways" align="center">0</p>
+<p id="used_berths" align="center">0<p/>
+<p id="reserved_berths" align="center">0<p/>
+</body>
 </html>
