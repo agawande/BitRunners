@@ -133,7 +133,11 @@
 		} // end of outer for
 		//console.log(ex_str);
 		//console.log(simTime);
-		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str + "1\n1000";
+		var update_mode;
+		if(document.getElementById("time").checked){update_mode="1"}
+		else{update_mode="0"}
+
+		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str 			+update_mode +"\n" + document.getElementById("updates").value;
 		console.log(inputString);
 		
 			$.ajax({
@@ -145,7 +149,7 @@
 				}
 			});
 			
-			//window.location.href = 'loading.html'; { input: inputString }
+			window.location.href = 'loading.html'; { input: inputString }
     }
     
     var counter = 0;
@@ -321,7 +325,36 @@
 				if(val > 100 || val < 0){wrong(textid);}
 				else{correct(textid);}
 			}
+			else if(textid == "updates")
+			{
+				if(document.getElementById("time").checked)
+				{
+					if(val==0){wrong(textid);}
+					else{correct(textid);}
+				}
+				else
+				{
+					if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){ wrong(textid); }
+					else{correct(textid);}
+				}
+			}
 			else{correct(textid);}
+		}
+	}
+
+	function checkRadio(textid)
+	{
+		var input = document.getElementById("updates");
+		var val = input.value;
+		if(textid == "event")
+		{
+			if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+			else{correct("updates");}
+		}
+		else if(textid == "time" && input.value!="")
+		{
+			if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+			else{correct("updates");}
 		}
 	}
 
