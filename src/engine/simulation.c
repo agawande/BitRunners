@@ -32,6 +32,7 @@
 #define UPDATE_FILENAME "update"
 #define RESULTS_FILENAME "results"
 #define ACK_FILENAME "_acknowledged"
+#define ABORT_FILENAME "_abort"
 
 //Global variables suck, but still...
 Parameters *params;
@@ -117,6 +118,9 @@ void initialisation(){
 	add_event(EVENT_STORM_OUT, uniform(time+params->storm_i, time+params->storm_f, 0));
 	
 	update=1;
+	
+	//Remove residual abort signal
+	remove(ABORT_FILENAME);
 }
 
 void increment_planes_size(int increment){
@@ -435,7 +439,7 @@ void write_result(){
 
 void wait_for_ack(){
 	int polls=0;
-	while (!exists(ACK_FILENAME)){
+	while (!exists(ACK_FILENAME) && !exists(ABORT_FILENAME)){
 		usleep(100*1000); //100 milliseconds
 		polls++;
 	}
@@ -452,6 +456,12 @@ int start_simulation(Parameters *p){
 	initialisation();
 	
 	do{
+		if (exists(ABORT_FILENAME)){
+			printf("Aborting\n");
+			remove(ABORT_FILENAME);
+			break;
+		}
+		
 		//while(1){
 			timing();
 			//printf("event: %d, time: %.2f\n", next_event_type, sim_time);

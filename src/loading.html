@@ -68,6 +68,10 @@ $(document).ready(function() {
 		poll();
 });
 
+$(window).unload(function(){
+	$.get("php/abort.php");
+});
+
 </script>
 <body>
 <p id="sim_time" align="center">0</p><div id="simProgress"></div>
