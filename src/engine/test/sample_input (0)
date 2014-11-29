@@ -1,0 +1,17 @@
+20				//Sim time
+50 10 10		//Storms: Mean, interval
+2 4 0.5 1		//Airport
+1 1				//Plane arrival interval
+5 5				//loading interval
+0				//Cat three
+2				//Plane sets
+1				//Set one plane number
+10 10			//RTT interval (one)
+6 6				//Loading interval (one)
+40				//Cat three (one)
+1				//Set two plane number
+40 40			//RTT interval (two)
+7 7				//Loading interval (two)
+60				//Cat three (two)
+1				//Hourly
+5				//Each 5 hours

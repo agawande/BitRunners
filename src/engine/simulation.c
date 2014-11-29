@@ -19,7 +19,8 @@
 #define EVENT_PLANE_DEPARTURE 5
 #define EVENT_STORM_IN 6
 #define EVENT_STORM_OUT 7
-#define EVENT_SIM_END 8
+#define EVENT_UPDATE 8
+#define EVENT_SIM_END 9
 
 //Event parameters
 #define ATTR_PLANE_INDEX 3
@@ -47,7 +48,7 @@ int planes_size, num_x_planes;
 plane_t **planes;
 plane_t *fx_stat;
 
-int update;
+int num_update;
 
 void enqueue(int);
 void dequeue(int);
@@ -117,7 +118,10 @@ void initialisation(){
 	add_event(EVENT_STORM_IN, time);
 	add_event(EVENT_STORM_OUT, uniform(time+params->storm_i, time+params->storm_f, 0));
 	
-	update=1;
+	if (params->update_mode==1){
+		add_event(EVENT_UPDATE, params->update_time);
+	}
+	num_update=0;
 	
 	//Remove residual abort signal
 	remove(ABORT_FILENAME);
@@ -232,6 +236,7 @@ void dequeue(int queue){
 			//Berth and taxiway are reserved
 			reserve_berth(berths[berth], sim_time);
 			use_taxiway(taxiway);
+			plane_dequeue(planes[(int)transfer[ATTR_PLANE_INDEX]], sim_time);
 			//Plane berth and taxiway usage
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->berth=berth;
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->taxiway=taxiway;
@@ -247,6 +252,7 @@ void dequeue(int queue){
 			
 			//Taxiway is reserved and plane usage set
 			use_taxiway(taxiway);
+			plane_dequeue(planes[(int)transfer[ATTR_PLANE_INDEX]], sim_time);
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->taxiway=taxiway;
 			
 			//The event is submitted
@@ -336,6 +342,7 @@ void departure(void){
 	int index=transfer[ATTR_PLANE_INDEX];
 	int set=planes[index]->set;
 	empty_taxiway(planes[index]->taxiway);
+	plane_takeoff(planes[index], sim_time);
 	if (set==-1){
 		//Relevant stats are recorded
 		fx_stat->arrivals+=planes[index]->arrivals;
@@ -396,44 +403,81 @@ void write_update(){
 	fclose(update);
 }
 
-void write_result(){
-	int i;
-	float res;
+void write_results(){
+	int i, j, current;
+	float reserved, occupied;
+	int p_arrivals, p_landings;
+	float avg_queue_time, avg_res_time;
+	
 	FILE *results = fopen(RESULTS_FILENAME, "w");
 	//Total sim time
 	fprintf(results, "%.2f\n", sim_time);
 	//Storms
-	fprintf(update, "%.2f\n", 100*storm_time/sim_time);
-	fprintf(update, "%d\n", storms);
+	fprintf(results, "%.2f\n", 100.0*storm_time/sim_time);
+	fprintf(results, "%d\n", storms);
 	//Arrivals, landings
-	fprintf(update, "%d\n%d\n", arrivals, landings);
+	fprintf(results, "%d/%d\n", arrivals, landings);
 	
 	//Taxiway stats, per taxiway
-	fprintf(update, "%d\n", params->numTaxiways);
-	for (i=0, res=0; i<params->numTaxiways; i++){
-		fprintf(update, "%.2f\n", 100*taxiways[i]->occupied_time/sim_time);
-		res+=taxiways[i]->occupied_time;
+	fprintf(results, "%d\n", params->numTaxiways);
+	for (i=0, occupied=0; i<params->numTaxiways; i++){
+		fprintf(results, "%.2f\n", 100*taxiways[i]->occupied_time/sim_time);
+		occupied+=taxiways[i]->occupied_time;
 	}
 	//Taxiway stats, totals
-	fprintf(results, "%.2f\n", 100*(res/params->numTaxiways)/sim_time);
+	fprintf(results, "%.2f\n", 100*(occupied/params->numTaxiways)/sim_time);
 	//Berths stats, per berth
-	fprintf(update, "%d\n", params->numBerths);
-	for (i=0, res=0; i<params->numBerths; i++){
-		fprintf(update, "%.2f\n", 100*berths[i]->occupied_time/sim_time);
-		res+=berths[i]->occupied_time;
+	fprintf(results, "%d\n", params->numBerths);
+	for (i=0, reserved=0, occupied=0; i<params->numBerths; i++){
+		fprintf(results, "%.2f\n", 100*berths[i]->reserved_time/sim_time);
+		fprintf(results, "%.2f\n", 100*berths[i]->occupied_time/sim_time);
+		reserved+=berths[i]->reserved_time;
+		occupied+=berths[i]->occupied_time;
 	}
 	//Berths stats, totals
-	fprintf(results, "%.2f\n", 100*(res/params->numBerths)/sim_time);
+	fprintf(results, "%.2f\n", 100*(reserved/params->numBerths)/sim_time);
+	fprintf(results, "%.2f\n", 100*(occupied/params->numBerths)/sim_time);
 	
 	//Fx plane stats
-	fprintf(update, "%.2f\n", (100.0*fx_stat->times_served)/fx_stat->arrivals);
-	fprintf(update, "%.2f\n", fx_stat->queue_time/fx_stat->times_served);
-	fprintf(update, "%.2f\n", fx_stat->residence_time/fx_stat->times_served);
+	fprintf(results, "%.2f\n", (100.0*fx_stat->times_served)/fx_stat->arrivals);
+	fprintf(results, "%.2f\n", fx_stat->queue_time/fx_stat->times_served);
+	fprintf(results, "%.2f\n", fx_stat->residence_time/fx_stat->times_served);
 	
 	//Per set stats
-	fprintf(update, "%d\n", params->numXPlaneTypes);
-	for (i=0; i<params->numXPlaneTypes; i++){
-		fprintf(update, "%d\n", params->numXPlaneTypes);
+	fprintf(results, "%d\n", params->numXPlaneTypes);
+	for (i=0, current=0; i<params->numXPlaneTypes; i++, current+=j){
+		p_arrivals=0; p_landings=0; avg_queue_time=0; avg_res_time=0;
+		for (j=0; j<params->xPlaneTypes[i].numPlanes; j++){
+			p_arrivals+=planes[current+j]->arrivals;
+			p_landings+=planes[current+j]->times_served;
+			avg_queue_time+=planes[current+j]->queue_time;
+			avg_res_time+=planes[current+j]->residence_time;
+		}
+		fprintf(results, "%.2f\n", (100.0*p_landings)/p_arrivals);
+		fprintf(results, "%.2f\n", avg_queue_time/j);
+		fprintf(results, "%.2f\n", avg_res_time/j);
+	}
+	
+	fclose(results);
+}
+
+void push_stats(){
+	int i;
+	
+	//Facilities
+	for (i=0; i<params->numBerths; i++){
+		occupy_berth(berths[i], sim_time);
+		free_berth(berths[i], sim_time);
+	}
+	for (i=0; i<params->numTaxiways; i++){
+		free_taxiway(taxiways[i], sim_time);
+	}
+	
+	//Planes
+	for (i=0; i<planes_size; i++){
+		if (planes[i]!=NULL){
+			
+		}
 	}
 }
 
@@ -521,22 +565,27 @@ int start_simulation(Parameters *p){
 		dequeue(BERTH_QUEUE);
 		dequeue(RUNWAY_QUEUE);
 		
-		//If the user wants time-based updates
-		if (params->update_mode){
-			if ((int)(sim_time/(update*params->update_time))){
-				write_update();
-				wait_for_ack();
-				update++;
-			}
+		//Time-based updates
+		if (next_event_type==EVENT_UPDATE){
+			add_event(EVENT_UPDATE, sim_time+params->update_time);
+			write_update();
+			wait_for_ack();
 		}
-		else{
+		
+		//Event-based updates
+		if (params->update_mode==2 && num_update++%params->update_events){
 			write_update();
 			wait_for_ack();
 		}
 	}
 	while (next_event_type!=EVENT_SIM_END);
+	printf("End of sim\n");
+	
+	//Push stats
+	push_stats();
 	
 	//Write to file.
+	write_results();
 	
 	deallocation();
 	

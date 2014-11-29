@@ -43,6 +43,7 @@ typedef struct sParameters{
 	//Update parameters.
 	int update_mode;
 	float update_time;
+	int update_events;
 }Parameters;
 
 #endif
