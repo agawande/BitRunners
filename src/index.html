@@ -1,104 +1,10 @@
 <html>
 <head>
 <title>Simulation GUI</title>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="js/readAndWrite.js"></script>
+<link href="css/index.css" rel="stylesheet">
 </head>
-<style>
-body,
-html {
-margin:0;
-padding:0;
-color:#000;
-background:#a7a09a;
-}
-
-#wrap {
-width:750px;
-margin:0 auto;
-background:#99c;
-}
-
-
-#header {
-background:#ddd;
-}
-#main {
-background:#33CCFF;
-float:left;
-width:500px;
-}
-#sidebar {
-background:#99FF33;
-float:right;
-width:250px;
-}
-
-#sidebar{
-	position:relative;
-}
-
-.container{
-	margin:10px;
-	position:relative;
-}
-
-.caption{
-	text-align:left;
-	font-size:12px;
-	margin-top:5px;
-	margin-bottom:2px;
-}
-
-.left {
-    width:180px;
-    float: left;
-    text-align: left;
-	margin-left:40px;
-}
-.right {
-    margin-left: 40px;
-    float:left;
-	display: inline-block;
-}
-
-.field{
-    display: inline-block;
-	vertical-align:top;
-}
-
-.field1{
-    display: inline-block;
-	height:100%;
-	overflow:hidden;
-}
-
-.input_correct{
-	border: 1px solid;
-	border-radius: 5;
-	height: 20px;
-}
-
-.input_wrong{
-	border: 2px solid red;
-	border-radius: 5;
-	height: 20px;
-}
-
-.input_wrong_alert{
-	font-size: 12px;
-	color: red;
-}
-
-
-input[type=text] {
-}
-
-.space{
-padding-left:10px;
-}
-
-</style>
 
 <body>
 	<div id="wrap">
@@ -110,7 +16,7 @@ padding-left:10px;
 		<input type="radio" name="update_mode" id="time" value="Time" onclick="checkRadio(this.id);" />Time
 		<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
 		<input type="text" class="input_correct" id="updates" value=""  onblur="checkInput(this.id)" disabled >
-		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" disabled>
+		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" />
 	</div>
 	<div id="main">
 	<div class="space">
@@ -150,7 +56,7 @@ padding-left:10px;
 		<span class="input_wrong_alert" id="ex_plane_loading_time_variation_status"></span>
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
 		<input type="text" class="input_correct" id="ex_cat3_landing" value="50" onblur="checkInput(this.id)">
-		<span class="input_wrong_alert" id="ex_cat3_landing"></span>
+		<span class="input_wrong_alert" id="ex_cat3_landing_status"></span>
 		</div>
 			<input type="button" class="buttonWidth" id="btnAddressAdd" value="+" onClick="addSet()"/>
 			<input type="button" id="delete" value="--" onClick="deleteSet()" />

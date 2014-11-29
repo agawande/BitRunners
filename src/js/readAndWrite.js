@@ -135,11 +135,12 @@
 		//console.log(simTime);
 		var update_mode;
 		if(document.getElementById("time").checked){update_mode="1"}
-		else{update_mode="0"}
+		else if(document.getElementById("none")){update_mode="0"}
+		else{update_mode="2"}
 
 		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str 			+update_mode +"\n" + document.getElementById("updates").value;
 		console.log(inputString);
-		
+
 			$.ajax({
       			type: "POST",
       			url: "php/save.php",
@@ -184,7 +185,15 @@
 		if(!input.value.match(/^\d+(\.\d+)?$/))
 		{
 			wrong(textid);
-			document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
+			var l = textid.charAt(textid.length-2);
+			if(l != "_")
+			{
+				document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
+			}
+			else
+			{
+				document.getElementById(textid.substring(0, textid.length-2)+"_status_"+textid.charAt(textid.length-1)).innerHTML="Needs to be a positive value";
+			}
 		}
 		else
 		{
@@ -310,16 +319,24 @@
 				if(textid.indexOf("variation") == -1)
 				{
 					var l =  textid.charAt(13);
-					if(val==0){wrong(textid);}
+					if(val==0){document.getElementById(textid+"_status").innerHTML="Needs to be a positive value"; wrong(textid);}
 					else{correct(textid);}
 					if(l=="")
 					{
-						if(val>=document.getElementById("ex_plane_rtt_variation").value && document.getElementById("ex_plane_rtt_variation").value!=""){correct("ex_plane_rtt_variation");} else{wrong(("ex_plane_rtt_variation"))}
+						if(val>=document.getElementById("ex_plane_rtt_variation").value && document.getElementById("ex_plane_rtt_variation").value!=""){correct("ex_plane_rtt_variation");} 
+						else{
+						document.getElementById("ex_plane_rtt_variation_status").innerHTML="Should be <= than rtt";
+						wrong("ex_plane_rtt_variation");
+						}
 					}
 					else
 					{
 						if(val>=document.getElementById("ex_plane_rtt_variation_"+l).value && document.getElementById("ex_plane_rtt_variation_"+l).value!=""){correct("ex_plane_rtt_variation_"+l);}
-						else{wrong(("ex_plane_rtt_variation_"+l))}
+						else
+						{
+							document.getElementById("ex_plane_rtt_variation_status_"+l).innerHTML="Should be <= than rtt";
+							wrong("ex_plane_rtt_variation_"+l);
+						}
 					}
 				}
 				else
@@ -327,12 +344,23 @@
 					var l =  textid.charAt(23);
 					if(l == "")
 					{
-						if(val>document.getElementById("ex_plane_rtt").value && document.getElementById("ex_plane_rtt").value!=0){wrong(textid);} 
+						if(val>document.getElementById("ex_plane_rtt").value 
+						   && document.getElementById("ex_plane_rtt").value!=0)
+						{
+							document.getElementById(textid+"_status").innerHTML="Needs to be a positive value <= rtt";
+							wrong(textid);
+						}
 						else{correct(textid);}
 					}
 					else
 					{
-						if(val>document.getElementById("ex_plane_rtt_"+l).value && document.getElementById("ex_plane_rtt_"+l).value!=0){wrong(textid);}
+					if(val>document.getElementById("ex_plane_rtt_"+l).value 
+						&& document.getElementById("ex_plane_rtt_"+l).value!=0)
+						{
+							document.getElementById(textid.substring(0, textid.length-2)+"_status_"+l).innerHTML
+							="Should be +ve value <= than rtt";
+							wrong(textid);
+						}
 						else{correct(textid);}
 					}
 				}
@@ -342,15 +370,30 @@
 				if(textid.indexOf("variation") == -1)
 				{
 					var l =  textid.charAt(22);
-					if(val==0){wrong(textid);}
+					if(val==0){document.getElementById(textid+"_status").innerHTML="Needs to be a positive value"; wrong(textid);}
 					else{correct(textid);}
 					if(l=="")
 					{
-						if(val>=document.getElementById("ex_plane_loading_time_variation").value && document.getElementById("ex_plane_loading_time_variation").value!=""){correct("ex_plane_loading_time_variation");} else{wrong(("ex_plane_loading_time_variation"))}
+						if(val>=document.getElementById("ex_plane_loading_time_variation").value 
+							&& document.getElementById("ex_plane_loading_time_variation").value!="")
+							{correct("ex_plane_loading_time_variation");} 
+						else
+						{
+							document.getElementById("ex_plane_loading_time_variation_status").innerHTML="Should be <= than loading time";
+							wrong(("ex_plane_loading_time_variation"))
+						}
 					}
 					else
 					{
-						if(val>=document.getElementById("ex_plane_loading_time_variation_"+l).value && document.getElementById("ex_plane_loading_time_variation_"+l).value!=""){correct("ex_plane_loading_time_variation_"+l);} else{wrong(("ex_plane_loading_time_variation_"+l))}
+						if(val>=document.getElementById("ex_plane_loading_time_variation_"+l).value 
+							&& document.getElementById("ex_plane_loading_time_variation_"+l).value!="")
+							{correct("ex_plane_loading_time_variation_"+l);} 
+						else
+						{
+							document.getElementById("ex_plane_loading_time_variation_status_"+l).innerHTML
+							="Should be <= than loading time";
+							wrong("ex_plane_loading_time_variation_"+l);
+						}
 					}
 				}
 				else
@@ -358,19 +401,50 @@
 					var l =  textid.charAt(32);
 					if(l == "")
 					{
-						if(val>document.getElementById("ex_plane_loading_time").value && document.getElementById("ex_plane_loading_time").value!=0){wrong(textid);} 
+						if(val>document.getElementById("ex_plane_loading_time").value 
+						&& document.getElementById("ex_plane_loading_time").value!=0)
+						{
+							document.getElementById(textid+"_status").innerHTML="Needs to be a positive value <= loading";
+							wrong(textid);
+						}
 						else{correct(textid);}
 					}
 					else
 					{
-						if(val>document.getElementById("ex_plane_loading_time_"+l).value && document.getElementById("ex_plane_loading_time_"+l).value!=0){wrong(textid);} else{correct(textid);}
+						if(val>document.getElementById("ex_plane_loading_time_"+l).value 
+						&& document.getElementById("ex_plane_loading_time_"+l).value!=0)
+						{
+							document.getElementById(textid.substring(0, textid.length-2)+"_status_"+l).innerHTML
+							="Should be +ve value <= than loading time";
+							wrong(textid);
+						}
+						else{correct(textid);}
 					}
 				}
 			}
-			else if(textid == "ex_cat3_landing" || textid == "ex_cat3_landing_1" || textid == "ex_cat3_landing_2" || textid == "ex_cat3_landing_3" || textid == "ex_cat3_landing_4")
+			else if(textid.indexOf("ex_cat3_landing") != -1)
 			{
-				if(val > 100 || val < 0){wrong(textid);}
-				else{correct(textid);}
+				var l = textid.charAt(textid.length-2)
+				if(l != "_")
+				{
+					if(val < 0 || val >100)
+					{
+						wrong(textid);
+						document.getElementById(textid + "_status").innerHTML = "Probablity must be between 0 & 100";
+					}
+					else{correct(textid);}
+				}
+				else
+				{
+					if(val < 0 || val >100)
+					{
+						wrong(textid);
+						var l = textid.charAt(textid.length-1);
+						document.getElementById(textid.substring(0, textid.length-2) + "_status_" + l).innerHTML 
+						= "Probablity must be between 0 & 100";
+					}
+					else{correct(textid);}
+				}
 			}
 			else if(textid == "updates")
 			{
@@ -394,20 +468,22 @@
 		var input = document.getElementById("updates");
 		var val = input.value;
 		if (textid=="none"){
-			correct("updates");
+			input.className="input_correct";
+			document.getElementById("processAllDup").disabled = false;
 			input.disabled=true;
+			document.getElementById("processAllDup").disabled = false;
 		}
 		else{
 			input.disabled=false;
 			if(textid == "event")
 			{
-				//TODO regex accepts empty str
-				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/) || val == "")
+				{wrong("updates");}
 				else{correct("updates");}
 			}
-			else if(textid == "time" && input.value!="")
+			else if(textid == "time")
 			{
-				if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+				if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/) || val==""){wrong("updates");}
 				else{correct("updates");}
 			}
 		}
@@ -416,7 +492,16 @@
 	function correct(textid)
 	{
 		document.getElementById(textid).className="input_correct";
-		document.getElementById(textid+"_status").innerHTML="";
+		
+		var l = textid.charAt(textid.length-2);
+		if(l != "_")
+		{
+			document.getElementById(textid+"_status").innerHTML="";
+		}
+		else
+		{
+			document.getElementById(textid.substring(0, textid.length-2)+"_status_"+textid.charAt(textid.length-1)).innerHTML="";
+		}
 		if(allCorrect())
 		{
 			document.getElementById("processAllDup").disabled = false;
