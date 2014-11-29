@@ -73,11 +73,20 @@ width:250px;
 	overflow:hidden;
 }
 
+.input_correct{
+	border: 1px solid;
+	border-radius: 5;
+	height: 20px;
+}
+
+.input_wrong{
+	border: 2px solid red;
+	border-radius: 5;
+	height: 20px;
+}
+
 
 input[type=text] {
-  border: 1px solid;
-  border-radius: 5;
-  height: 20px;
 }
 
 .space{
@@ -91,39 +100,40 @@ padding-left:10px;
 	<div id="header"><img src="media/header.png" width="750" height="75px"></div>
 	<div id="control">
 		<a name="top"></a>
-		<input type="radio" name="update_mode" id="time" value="Time"  onclick="checkRadio(this.id);" checked/>Time
+		<input type="radio" name="update_mode" id="none" value="None" onclick="checkRadio(this.id);" checked />None
+		<input type="radio" name="update_mode" id="time" value="Time" onclick="checkRadio(this.id);" />Time
 		<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
-		<input type="text" id="updates" value="20" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="updates" value="20" onblur="checkInput(this.id)">
 		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" disabled>
 	</div>
 	<div id="main">
 	<div class="space">
 		<h2>Regular plane parameters</h2>
 		<div class="caption">Arrival rate (hours)</div>
-		<input type="text" id="plane_arrival_rate" value="10" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="plane_arrival_rate" value="10" onblur="checkInput(this.id)">
 		<div class="caption">Arrival rate variation (hours)</div>
-		<input type="text" id="plane_arrival_rate_variation" value="1" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="plane_arrival_rate_variation" value="1" onblur="checkInput(this.id)">
 		<div class="caption">Loading time (hours)</div>
-		<input type="text" id="plane_loading_time" value="5" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="plane_loading_time" value="5" onblur="checkInput(this.id)">
 		<div class="caption">Loading time variation (hours)</div>
-		<input type="text" id="plane_loading_time_variation" value="1" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="plane_loading_time_variation" value="1" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
-		<input type="text" id="cat3_landing" value="50" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="cat3_landing" value="50" onblur="checkInput(this.id)">
 		
 		<div class="container" id="external_plane_params">
 		<h2>External plane set 1 parameters  </h2>
 		<div class="caption">Number of planes</div>
-		<input type="text" id="ex_plane_number" value="5" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_plane_number" value="5" onblur="checkInput(this.id)">
 		<div class="caption">Round trip time (hours)</div>
-		<input type="text" id="ex_plane_rtt" value="50" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_plane_rtt" value="50" onblur="checkInput(this.id)">
 		<div class="caption">Round trip time variation (hours)</div>
-		<input type="text" id="ex_plane_rtt_variation" value="5" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_plane_rtt_variation" value="5" onblur="checkInput(this.id)">
 		<div class="caption">Loading time (hours)</div>
-		<input type="text" id="ex_plane_loading_time" value="10" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_plane_loading_time" value="10" onblur="checkInput(this.id)">
 		<div class="caption">Loading time variation (hours)</div>
-		<input type="text" id="ex_plane_loading_time_variation" value="2" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_plane_loading_time_variation" value="2" onblur="checkInput(this.id)">
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
-		<input type="text" id="ex_cat3_landing" value="50" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="ex_cat3_landing" value="50" onblur="checkInput(this.id)">
 		</div>
 			<input type="button" class="buttonWidth" id="btnAddressAdd" value="+" onClick="addSet()"/>
 			<input type="button" id="delete" value="--" onClick="deleteSet()" />
@@ -133,28 +143,28 @@ padding-left:10px;
 		<div class="space">
 		<h2>Time</h2>
 		<div class="caption">Simulation Length (hours)</div>
-		<input type="text" id="sim_time" value="5000" onblur="checkInput(this.id)" />
+		<input type="text" class="input_correct" id="sim_time" value="5000" onblur="checkInput(this.id)" />
 		<hr />
 		
 		<h2>Weather</h2>
 		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
-		<input type="text" id="storm_mean" value="48" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="storm_mean" value="48" onblur="checkInput(this.id)">
 		<div class="caption">Mean Storm length (hours)</div>
-		<input type="text" id="storm_length" value="4" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="storm_length" value="4" onblur="checkInput(this.id)">
 		<div class="caption">Storm length variation (hours)</div>
-		<input type="text" id="storm_variation" value="2" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="storm_variation" value="2" onblur="checkInput(this.id)">
 		
 		<hr />
 		
 		<h2>Airport features</h2>
 		<div class="caption">Number of berths</div>
-		<input type="text" id="berth_number" value="4" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="berth_number" value="4" onblur="checkInput(this.id)">
 		<div class="caption">Number of taxiways</div>
-		<input type="text" id="taxiway_number" value="4" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="taxiway_number" value="4" onblur="checkInput(this.id)">
 		<div class="caption">Taxiway travel time (hours)</div>
-		<input type="text" id="taxiway_travel_time" value="0.5" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="taxiway_travel_time" value="0.5" onblur="checkInput(this.id)">
 		<div class="caption">De/berthing time (hours)</div>
-		<input type="text" id="deberthing_time" value="1" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="deberthing_time" value="1" onblur="checkInput(this.id)">
 		<br />
 		</div>  <!--END OF SPACE -->
 	</div>

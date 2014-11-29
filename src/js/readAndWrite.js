@@ -360,7 +360,7 @@
 
 	function correct(textid)
 	{
-		document.getElementById(textid).style.backgroundColor = "#BCED91";
+		document.getElementById(textid).className="input_correct";
 		if(allCorrect())
 		{
 			document.getElementById("processAllDup").disabled = false;
@@ -369,15 +369,7 @@
 	
 	function wrong(textid)
 	{
-		if(document.getElementById(textid).value!="")
-		{
-			document.getElementById(textid).style.backgroundColor = "#FFCC00";
-			//console.log(document.getElementById(textid).style.backgroundColor);
-		}
-		else
-		{
-			document.getElementById(textid).style.backgroundColor = "white";
-		}
+		document.getElementById(textid).className="input_wrong";
 		document.getElementById("processAllDup").disabled = true;
 	}
 
@@ -388,7 +380,7 @@
 		var bgcolor = "rgb(255, 204, 0)";
 		for(var i=0; i< textbox.length; i++)
 		{	
-			if(textbox[i].style.backgroundColor == bgcolor || textbox[i].style.backgroundColor == "white")
+			if(textbox[i].className=="input_wrong")
 			{	
 				return false;
 			}
