@@ -9,7 +9,7 @@
 #include "simlib/simlib.h"
 #include "parser.h"
 #include "sim_io.h"
-
+	 
 //Events
 #define EVENT_PLANE_ARRIVAL 0
 #define EVENT_PLANE_AT_BERTHS 1
@@ -36,7 +36,7 @@
 //Global variables suck, but still...
 Parameters *params;
 
-int storm, storms;
+int storm, storms, storm_in, storm_time;
 int arrivals, landings;
 
 berth_t **berths;
@@ -60,14 +60,15 @@ void queues_status(void);
  *************************************************************/
 void initialisation(){
 	int i, j, index;
-
+	
 	srand(time(NULL));
-
+	
 	storm=0;
 	storms=0;
+	storm_time=0;
 	arrivals=0;
 	landings=0;
-
+	
 	//List init
 	berths = (berth_t**)malloc(params->numBerths*sizeof(berth_t*));
 	for (i=0; i<params->numBerths; i++){
@@ -77,17 +78,17 @@ void initialisation(){
 	for (i=0; i<params->numTaxiways; i++){
 		taxiways[i]=get_taxiway();
 	}
-
+	
 	for (i=0, num_x_planes=0; i<params->numXPlaneTypes; i++){
 		num_x_planes+=params->xPlaneTypes[i].numPlanes;
 	}
 	planes_size=num_x_planes+5;
-
+	
 	planes = (plane_t**)malloc(planes_size*sizeof(plane_t*));
-
+	
 	//End of simulation scheduling
 	add_event(EVENT_SIM_END, params->simLength);
-
+	
 	//External planes start at a random position in their journey (RTT)
 	for (i=0, index=0; i<params->numXPlaneTypes; i++){
 		for (j=0; j<params->xPlaneTypes[i].numPlanes; j++, index++){
@@ -96,25 +97,25 @@ void initialisation(){
 			add_event(EVENT_PLANE_ARRIVAL, rand()%(int)params->xPlaneTypes[i].RTT_f);
 		}
 	}
-
+	
 	//Fixed plane event scheduling
 	transfer[ATTR_PLANE_INDEX]=index;
 	planes[index]=get_plane(-1, rand()%100<params->fxTypeParams.cat3Prob);
 	add_event(EVENT_PLANE_ARRIVAL, uniform(params->fxTypeParams.arrival_i, params->fxTypeParams.arrival_f, 0));
-
+	
 	//Statistics holder for fixed planes.
 	fx_stat=get_plane(-1, 0);
-
+	
 	//The reminder of the array is filled with placeholders
 	for (++index; index<planes_size; index++){
 		planes[index]=NULL;
 	}
-
+	
 	//First storm
 	float time = expon(params->stormMean, 1);
 	add_event(EVENT_STORM_IN, time);
 	add_event(EVENT_STORM_OUT, uniform(time+params->storm_i, time+params->storm_f, 0));
-
+	
 	update=1;
 }
 
@@ -223,14 +224,14 @@ void dequeue(int queue){
 		while ((berth=available_berth())!=-1 && (taxiway=available_taxiway())!=-1 && list_size[RUNWAY_QUEUE]){
 			//First item is dequeued
 			list_remove(FIRST, RUNWAY_QUEUE);
-
+			
 			//Berth and taxiway are reserved
 			reserve_berth(berths[berth], sim_time);
 			use_taxiway(taxiway);
 			//Plane berth and taxiway usage
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->berth=berth;
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->taxiway=taxiway;
-
+			
 			//The event is submitted
 			add_event(EVENT_PLANE_AT_BERTHS, params->taxiwayTravelTime);
 		}
@@ -239,11 +240,11 @@ void dequeue(int queue){
 		while ((taxiway=available_taxiway())!=-1 && list_size[BERTH_QUEUE]){
 			//First item is dequeued
 			list_remove(FIRST, BERTH_QUEUE);
-
+			
 			//Taxiway is reserved and plane usage set
 			use_taxiway(taxiway);
 			planes[(int)transfer[ATTR_PLANE_INDEX]]->taxiway=taxiway;
-
+			
 			//The event is submitted
 			add_event(EVENT_PLANE_DEPARTURE, params->taxiwayTravelTime);
 		}
@@ -255,10 +256,10 @@ void dequeue(int queue){
  *****************************/
 void arrival(void){
 	int i, index=transfer[ATTR_PLANE_INDEX];
-
+	
 	//Arrivals is incremented
 	arrivals++;
-
+	
 	//If the plane is a fixed plane
 	if (planes[index]->set==-1){
 		//The next arrival event needs to be set
@@ -280,7 +281,7 @@ void arrival(void){
 		//The transfer array index needs to be restored
 		transfer[ATTR_PLANE_INDEX]=index;
 	}
-
+	
 	//Arrival is called
 	plane_arrival(planes[index]);
 	//If the weather is clear or the plane has cat3 landing gear
@@ -337,7 +338,7 @@ void departure(void){
 		fx_stat->times_served+=planes[index]->times_served;
 		fx_stat->residence_time+=planes[index]->residence_time;
 		fx_stat->queue_time+=planes[index]->queue_time;
-
+		
 		//The plane is deallocated and a placeholder is set
 		deallocate_plane(planes[index]);
 		planes[index]=NULL;
@@ -368,9 +369,9 @@ void write_update(){
 			r_berths++;
 		}
 	}
-
+	
 	FILE *update = fopen(UPDATE_FILENAME, "w");
-
+	
 	//Current simulation time
 	fprintf(update, "%.2f/%.2f\n", sim_time, params->simLength);
 	//Arrivals and landings
@@ -387,19 +388,49 @@ void write_update(){
 	fprintf(update, "%d/%d\n", u_berths, params->numBerths);
 	//Berths reserved
 	fprintf(update, "%d/%d\n", r_berths, params->numBerths);
-
+	
 	fclose(update);
 }
 
 void write_result(){
-	FILE *file =
+	int i;
+	float res;
+	FILE *results = fopen(RESULTS_FILENAME, "w");
 	//Total sim time
+	fprintf(results, "%.2f\n", sim_time);
+	//Storms
+	fprintf(update, "%.2f\n", 100*storm_time/sim_time);
+	fprintf(update, "%d\n", storms);
 	//Arrivals, landings
-	//Berths stats
-	//Taxiway stats
+	fprintf(update, "%d\n%d\n", arrivals, landings);
+	
+	//Taxiway stats, per taxiway
+	fprintf(update, "%d\n", params->numTaxiways);
+	for (i=0, res=0; i<params->numTaxiways; i++){
+		fprintf(update, "%.2f\n", 100*taxiways[i]->occupied_time/sim_time);
+		res+=taxiways[i]->occupied_time;
+	}
+	//Taxiway stats, totals
+	fprintf(results, "%.2f\n", 100*(res/params->numTaxiways)/sim_time);
+	//Berths stats, per berth
+	fprintf(update, "%d\n", params->numBerths);
+	for (i=0, res=0; i<params->numBerths; i++){
+		fprintf(update, "%.2f\n", 100*berths[i]->occupied_time/sim_time);
+		res+=berths[i]->occupied_time;
+	}
+	//Berths stats, totals
+	fprintf(results, "%.2f\n", 100*(res/params->numBerths)/sim_time);
+	
 	//Fx plane stats
+	fprintf(update, "%.2f\n", (100.0*fx_stat->times_served)/fx_stat->arrivals);
+	fprintf(update, "%.2f\n", fx_stat->queue_time/fx_stat->times_served);
+	fprintf(update, "%.2f\n", fx_stat->residence_time/fx_stat->times_served);
+	
 	//Per set stats
-	//Grand-total?
+	fprintf(update, "%d\n", params->numXPlaneTypes);
+	for (i=0; i<params->numXPlaneTypes; i++){
+		fprintf(update, "%d\n", params->numXPlaneTypes);
+	}
 }
 
 void wait_for_ack(){
@@ -415,17 +446,17 @@ void wait_for_ack(){
 int start_simulation(Parameters *p){
 	int i, j;
 	params=p;
-
+	
 	maxatr=4;
 	init_simlib();
 	initialisation();
-
+	
 	do{
 		//while(1){
 			timing();
 			//printf("event: %d, time: %.2f\n", next_event_type, sim_time);
 		//}
-
+		
 		switch (next_event_type){
 			case EVENT_PLANE_ARRIVAL:
 				printf("Arrival event at %.2f: %d\n", sim_time, (int)transfer[ATTR_PLANE_INDEX]);
@@ -453,6 +484,9 @@ int start_simulation(Parameters *p){
 				break;
 			case EVENT_STORM_IN:
 				printf("Storm in event at t=%.2f\n", sim_time);
+				if (storm==0){
+					storm_in=sim_time;
+				}
 				//Storm in
 				storms++;
 				storm++;
@@ -467,13 +501,16 @@ int start_simulation(Parameters *p){
 				printf("Storm out event at t=%.2f\n", sim_time);
 				//Storm out
 				storm--;
+				if (storm==0){
+					storm_time+=sim_time-storm_in;
+				}
 				break;
 		}
-
+		
 		//Berth and taxiway availability are checked to see if something can be dequeued
 		dequeue(BERTH_QUEUE);
 		dequeue(RUNWAY_QUEUE);
-
+		
 		//If the user wants time-based updates
 		if (params->update_mode){
 			if ((int)(sim_time/(update*params->update_time))){
@@ -488,11 +525,11 @@ int start_simulation(Parameters *p){
 		}
 	}
 	while (next_event_type!=EVENT_SIM_END);
-
+	
 	//Write to file.
-
+	
 	deallocation();
-
+	
 	return 0;
 }
 
