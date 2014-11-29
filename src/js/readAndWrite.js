@@ -388,7 +388,7 @@
 		var bgcolor = "rgb(255, 204, 0)";
 		for(var i=0; i< textbox.length; i++)
 		{	
-			if(textbox[i].value == 0 || textbox[i].style.backgroundColor == bgcolor || textbox[i].style.backgroundColor == "white")
+			if(textbox[i].style.backgroundColor == bgcolor || textbox[i].style.backgroundColor == "white")
 			{	
 				return false;
 			}

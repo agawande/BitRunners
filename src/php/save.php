@@ -2,7 +2,7 @@
 
 $d = $_POST["input"];
 
-$f = fopen("testfile.txt", "w");
+$f = fopen("engine/sample_input", "w");
 fwrite($f, $d);
 fclose($f);
 ?>
