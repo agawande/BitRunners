@@ -1,7 +1,7 @@
 <?php
 
-$results = "engine/results.txt";
-$current = "engine/update";
+$results = "/var/www/html/src/engine/results.txt";
+$current = "/var/www/html/src/engine/update";
 $data = "waiting";
 
 if(file_exists($results) || file_exists($current))
@@ -14,7 +14,8 @@ if(file_exists($results) || file_exists($current))
 	{
 		$data = file_get_contents($current);
 		unlink($current);
-		$myfile = fopen("engine/_acknowledged", "w");
+		$myfile = fopen("/var/www/html/src/engine/_acknowledged", "w");
+		fclose($myfile);
 	}
 	echo $data;
 }

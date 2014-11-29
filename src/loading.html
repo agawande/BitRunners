@@ -16,6 +16,7 @@
 function poll()
 {
 	
+	timer = setTimeout(function(){poll();}, 500);
 	$.get("php/pollFile.php", function(data)	{
 					console.log(data);
 					
@@ -35,7 +36,6 @@ function poll()
 						}
 					}
 	});
-	timer = setTimeout(function(){poll();}, 500);
 }
 
 function update(str)
@@ -72,7 +72,7 @@ $(document).ready(function() {
 <body>
 <p id="sim_time" align="center">0</p><div id="simProgress"></div>
 <p id="weather" align="center">0</p>
-<img id="wimage" src="sun.jpeg" style="margin-left:auto; margin-right:auto; display:block;" width="100px" height="100px"/> <br />
+<img id="wimage" src="media/sun.jpeg" style="margin-left:auto; margin-right:auto; display:block;" width="100px" height="100px"/> <br />
 <p id="arrivals" align="center">0</p>
 
 <p id="planes_at_airport" align="center">0</p>

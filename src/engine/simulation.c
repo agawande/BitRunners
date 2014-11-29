@@ -440,7 +440,7 @@ void wait_for_ack(){
 		polls++;
 	}
 	remove(ACK_FILENAME);
-	usleep(polls<10?(500-polls*100)*1000:0);
+	usleep(polls<5?(500-polls*100)*1000:0);
 }
 
 int start_simulation(Parameters *p){
