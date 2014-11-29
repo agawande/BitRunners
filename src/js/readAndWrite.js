@@ -184,80 +184,127 @@
 		if(!input.value.match(/^\d+(\.\d+)?$/))
 		{
 			wrong(textid);
+			document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
 		}
 		else
 		{
 		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
 			{
-				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){ wrong(textid); }
+				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be a positive integer";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "sim_time")
 			{
-				if(val > 87658.1 || val < 720){wrong(textid);}
+				if(val<24){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="At least 24 hours";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "storm_mean")
 			{
-				if(val < 48 ){wrong(textid);}
+				if(val < 48 ){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="At least 48 hours";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "storm_length")
 			{
-				if(val > 24 || val < 2 ){wrong(textid);}
+				if (val < 2 ){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="At least 2 hours";
+				}
+				else if (val > 24){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="At most 24 hours";
+				}
 				else
 				{
 					correct(textid);
-					if(val>=parseFloat(document.getElementById("storm_variation").value) && parseInt(document.getElementById("storm_variation").value)!=0) {correct("storm_variation");}
-					else{wrong("storm_variation");}
+					if (parseFloat(document.getElementById("storm_variation").value)>val){
+						wrong("storm_variation");
+						document.getElementById("storm_variation_status").innerHTML="Needs to be smaller than the length";
+					}
+					else{correct("storm_variation");}
 				}
 			}
 			else if(textid == "storm_variation")
 			{
-				if(val>parseFloat(document.getElementById("storm_length").value)) {wrong(textid);}
+				if(val>parseFloat(document.getElementById("storm_length").value)){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be smaller than the length";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "taxiway_travel_time" || textid == "deberthing_time")
 			{
-				if(val == 0){wrong(textid);}
+				if(val == 0){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "plane_arrival_rate")
 			{
-				if(val == 0){wrong(textid);}
+				if(val == 0){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
+				}
 				else
 				{
 					correct(textid);
-					if(val>=parseFloat(document.getElementById("plane_arrival_rate_variation").value)) {correct("plane_arrival_rate_variation");}
-					else{wrong("plane_arrival_rate_variation");}
+					if(parseFloat(document.getElementById("plane_arrival_rate_variation").value)>val){
+						wrong("plane_arrival_rate_variation");
+						document.getElementById("plane_arrival_variation_status").innerHTML="Needs to be smaller than the rate";
+					}
+					else{correct("plane_arrival_rate_variation");}
 				}
 			}
 			else if(textid == "plane_arrival_rate_variation")
 			{
-				if(val>parseFloat(document.getElementById("plane_arrival_rate").value) && parseFloat(document.getElementById("plane_arrival_rate").value)!=0) {wrong(textid);}
+				if(val>parseFloat(document.getElementById("plane_arrival_rate").value)){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be smaller than the rate";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "plane_loading_time")
 			{
-				if(val == 0){wrong(textid);}
+				if(val == 0){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be a positive value";
+				}
 				else
 				{
 					correct(textid);
-					if(val>=document.getElementById("plane_loading_time_variation").value){correct("plane_loading_time_variation");}
-					else{wrong("plane_loading_time_variation");}
+					if(parseFloat(document.getElementById("plane_loading_time_variation").value)>val){
+						wrong("plane_loading_time_variation");
+						document.getElementById("plane_loading_time_variation_status").innerHTML="Needs to be smaller than the time";
+					}
+					else{correct("plane_loading_time_variation");}
 				}
 			}
 			else if(textid == "plane_loading_time_variation")
 			{
-				//console.log(val + "  >  " + document.getElementById("plane_loading_time").value);
-				if(val>document.getElementById("plane_loading_time").value){wrong(textid);}
+				if(val>parseFloat(document.getElementById("plane_loading_time").value)){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be smaller than the time";
+				}
 				else{correct(textid);}
 			}
 			else if(textid == "cat3_landing")
 			{
-				if(val > 100 || val < 0){wrong(textid);}
+				if(val > 100 || val < 0){
+					wrong(textid);
+					document.getElementById(textid+"_status").innerHTML="Needs to be in the interval [0,100]";
+				}
 				else{correct(textid);}
 			}
+			//TODO
 			else if(textid.indexOf("ex_plane_rtt") != -1)
 			{
 				if(textid.indexOf("variation") == -1)
@@ -346,21 +393,30 @@
 	{
 		var input = document.getElementById("updates");
 		var val = input.value;
-		if(textid == "event")
-		{
-			if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
-			else{correct("updates");}
+		if (textid=="none"){
+			correct("updates");
+			input.disabled=true;
 		}
-		else if(textid == "time" && input.value!="")
-		{
-			if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
-			else{correct("updates");}
+		else{
+			input.disabled=false;
+			if(textid == "event")
+			{
+				//TODO regex accepts empty str
+				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+				else{correct("updates");}
+			}
+			else if(textid == "time" && input.value!="")
+			{
+				if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/)){wrong("updates");}
+				else{correct("updates");}
+			}
 		}
 	}
 
 	function correct(textid)
 	{
 		document.getElementById(textid).className="input_correct";
+		document.getElementById(textid+"_status").innerHTML="";
 		if(allCorrect())
 		{
 			document.getElementById("processAllDup").disabled = false;
@@ -376,8 +432,6 @@
 	function allCorrect()
 	{
 		var textbox = document.getElementsByTagName('input');
-		var textid;
-		var bgcolor = "rgb(255, 204, 0)";
 		for(var i=0; i< textbox.length; i++)
 		{	
 			if(textbox[i].className=="input_wrong")

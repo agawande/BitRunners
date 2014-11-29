@@ -85,6 +85,11 @@ width:250px;
 	height: 20px;
 }
 
+.input_wrong_alert{
+	font-size: 12px;
+	color: red;
+}
+
 
 input[type=text] {
 }
@@ -100,10 +105,11 @@ padding-left:10px;
 	<div id="header"><img src="media/header.png" width="750" height="75px"></div>
 	<div id="control">
 		<a name="top"></a>
+		Update mode: 
 		<input type="radio" name="update_mode" id="none" value="None" onclick="checkRadio(this.id);" checked />None
 		<input type="radio" name="update_mode" id="time" value="Time" onclick="checkRadio(this.id);" />Time
 		<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
-		<input type="text" class="input_correct" id="updates" value="20" onblur="checkInput(this.id)">
+		<input type="text" class="input_correct" id="updates" value=""  onblur="checkInput(this.id)" disabled >
 		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" disabled>
 	</div>
 	<div id="main">
@@ -111,29 +117,40 @@ padding-left:10px;
 		<h2>Regular plane parameters</h2>
 		<div class="caption">Arrival rate (hours)</div>
 		<input type="text" class="input_correct" id="plane_arrival_rate" value="10" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="plane_arrival_rate_status"></span>
 		<div class="caption">Arrival rate variation (hours)</div>
 		<input type="text" class="input_correct" id="plane_arrival_rate_variation" value="1" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="plane_arrival_rate_variation_status"></span>
 		<div class="caption">Loading time (hours)</div>
 		<input type="text" class="input_correct" id="plane_loading_time" value="5" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="plane_loading_time_status"></span>
 		<div class="caption">Loading time variation (hours)</div>
 		<input type="text" class="input_correct" id="plane_loading_time_variation" value="1" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="plane_loading_time_variation_status"></span>
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
 		<input type="text" class="input_correct" id="cat3_landing" value="50" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="cat3_landing_status"></span>
 		
 		<div class="container" id="external_plane_params">
 		<h2>External plane set 1 parameters  </h2>
 		<div class="caption">Number of planes</div>
 		<input type="text" class="input_correct" id="ex_plane_number" value="5" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_plane_number_status"></span>
 		<div class="caption">Round trip time (hours)</div>
 		<input type="text" class="input_correct" id="ex_plane_rtt" value="50" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_plane_rtt_status"></span>
 		<div class="caption">Round trip time variation (hours)</div>
 		<input type="text" class="input_correct" id="ex_plane_rtt_variation" value="5" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_plane_rtt_variation_status"></span>
 		<div class="caption">Loading time (hours)</div>
 		<input type="text" class="input_correct" id="ex_plane_loading_time" value="10" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_plane_loading_time_status"></span>
 		<div class="caption">Loading time variation (hours)</div>
 		<input type="text" class="input_correct" id="ex_plane_loading_time_variation" value="2" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_plane_loading_time_variation_status"></span>
 		<div class="caption">Category 3 landing gear availability (percentage)</div>
 		<input type="text" class="input_correct" id="ex_cat3_landing" value="50" onblur="checkInput(this.id)">
+		<span class="input_wrong_alert" id="ex_cat3_landing"></span>
 		</div>
 			<input type="button" class="buttonWidth" id="btnAddressAdd" value="+" onClick="addSet()"/>
 			<input type="button" id="delete" value="--" onClick="deleteSet()" />
@@ -144,27 +161,35 @@ padding-left:10px;
 		<h2>Time</h2>
 		<div class="caption">Simulation Length (hours)</div>
 		<input type="text" class="input_correct" id="sim_time" value="5000" onblur="checkInput(this.id)" />
+		<div class="input_wrong_alert" id="sim_time_status"></div>
 		<hr />
 		
 		<h2>Weather</h2>
 		<div class="caption">Storm occurrence mean time (exponential RV, hours)</div>
 		<input type="text" class="input_correct" id="storm_mean" value="48" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="storm_mean_status"></div>
 		<div class="caption">Mean Storm length (hours)</div>
 		<input type="text" class="input_correct" id="storm_length" value="4" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="storm_length_status"></div>
 		<div class="caption">Storm length variation (hours)</div>
 		<input type="text" class="input_correct" id="storm_variation" value="2" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="storm_variation_status"></div>
 		
 		<hr />
 		
 		<h2>Airport features</h2>
 		<div class="caption">Number of berths</div>
 		<input type="text" class="input_correct" id="berth_number" value="4" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="berth_number_status"></div>
 		<div class="caption">Number of taxiways</div>
 		<input type="text" class="input_correct" id="taxiway_number" value="4" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="taxiway_number_status"></div>
 		<div class="caption">Taxiway travel time (hours)</div>
 		<input type="text" class="input_correct" id="taxiway_travel_time" value="0.5" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="taxiway_travel_time_status"></div>
 		<div class="caption">De/berthing time (hours)</div>
 		<input type="text" class="input_correct" id="deberthing_time" value="1" onblur="checkInput(this.id)">
+		<div class="input_wrong_alert" id="deberthing_time_status"></div>
 		<br />
 		</div>  <!--END OF SPACE -->
 	</div>
