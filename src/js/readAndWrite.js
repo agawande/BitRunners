@@ -465,26 +465,43 @@
 
 	function checkRadio(textid)
 	{
-		var input = document.getElementById("updates");
-		var val = input.value;
+		var update_param = document.getElementById("updates");
+		var update_time = document.getElementById("update_time");
+		var param_val = update_param.value;
+		var time_val = update_time.value;
 		if (textid=="none"){
-			input.className="input_correct";
-			document.getElementById("processAllDup").disabled = false;
-			input.disabled=true;
+			update_param.className="input_correct";
+			update_param.disabled=true;
+			
+			update_time.className="input_correct";
+			update_time.disabled=true;
+			
 			document.getElementById("processAllDup").disabled = false;
 		}
 		else{
-			input.disabled=false;
-			if(textid == "event")
-			{
-				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0 || !input.value.match(/^\d+(\.\d+)?$/) || val == "")
-				{wrong("updates");}
-				else{correct("updates");}
+			update_param.disabled=false;
+			update_time.disabled=false;
+			if(textid == "event"){
+				if(!update_param.value.match(/^\s*(\+|-)?\d+\s*$/) || param_val==0 || !update_param.value.match(/^\d+(\.\d+)?$/) || param_val==""){
+					wrong("updates");
+				}
+				else{
+					correct("updates");
+				}
 			}
-			else if(textid == "time")
-			{
-				if(val == 0 || !input.value.match(/^\d+(\.\d+)?$/) || val==""){wrong("updates");}
-				else{correct("updates");}
+			else if(textid == "time"){
+				if(param_val == 0 || !update_param.value.match(/^\d+(\.\d+)?$/) || param_val==""){
+					wrong("updates");
+				}
+				else{
+					correct("updates");
+				}
+			}
+			if (!update_param.value.match(/^\s*(\+|-)?\d+\s*$/) || param_val==0){
+				wrong("update_time");
+			}
+			else{
+				correct("update_time");
 			}
 		}
 	}

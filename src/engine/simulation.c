@@ -123,7 +123,8 @@ void initialisation(){
 	}
 	num_update=0;
 	
-	//Remove residual abort signal
+	//Remove residual signals
+	remove(ACK_FILENAME);
 	remove(ABORT_FILENAME);
 	//Remove residual results file
 	remove(RESULTS_FILENAME);
@@ -457,7 +458,7 @@ void write_results(){
 		}
 		fprintf(results, "%.2f ", (100.0*p_landings)/p_arrivals);
 		fprintf(results, "%.2f ", avg_queue_time/j);
-		fprintf(results, "%.2f\n", avg_res_time/j);
+		fprintf(results, "%.2f  ", avg_res_time/j);
 	}
 	
 	fclose(results);
@@ -488,7 +489,6 @@ void wait_for_ack(){
 		usleep(100*1000); //100 milliseconds
 	}
 	remove(ACK_FILENAME);
-	printf("found\n\n");
 	usleep(500000);
 }
 
@@ -507,10 +507,7 @@ int start_simulation(Parameters *p){
 			break;
 		}
 		
-		//while(1){
-			timing();
-			//printf("event: %d, time: %.2f\n", next_event_type, sim_time);
-		//}
+		timing();
 		
 		switch (next_event_type){
 			case EVENT_PLANE_ARRIVAL:
