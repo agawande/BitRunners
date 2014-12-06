@@ -15,6 +15,7 @@ function poll()
 {
 	timer = setTimeout(function(){poll();}, 500);
 	$.get("php/pollFile.php", function(data){
+		console.log("poll");
 		if(data != "waiting")
 		{
 			str = data.split("\n");

@@ -125,6 +125,8 @@ void initialisation(){
 	
 	//Remove residual abort signal
 	remove(ABORT_FILENAME);
+	//Remove residual results file
+	remove(RESULTS_FILENAME);
 }
 
 void increment_planes_size(int increment){
@@ -566,7 +568,9 @@ int start_simulation(Parameters *p){
 		
 		//Time-based updates
 		if (next_event_type==EVENT_UPDATE){
-			add_event(EVENT_UPDATE, sim_time+params->update_time);
+			printf("Update event at t=%.2f\n", sim_time);
+			printf("Next update at %.2f\n", sim_time+params->update_time);
+			add_event(EVENT_UPDATE, params->update_time);
 			write_update();
 			wait_for_ack();
 		}
