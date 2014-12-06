@@ -482,13 +482,12 @@ void push_stats(){
 }
 
 void wait_for_ack(){
-	int polls=0;
 	while (!exists(ACK_FILENAME) && !exists(ABORT_FILENAME)){
 		usleep(100*1000); //100 milliseconds
-		polls++;
 	}
 	remove(ACK_FILENAME);
-	usleep(polls<5?(500-polls*100)*1000:0);
+	printf("found\n\n");
+	usleep(500000);
 }
 
 int start_simulation(Parameters *p){

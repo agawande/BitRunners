@@ -8,33 +8,25 @@
 </head>
 <script>
 
-	var timer;
-	
-	var stop = true;
-	var str = "";
+var timer;
+var str = "";
 
 function poll()
 {
-	
 	timer = setTimeout(function(){poll();}, 500);
-	$.get("php/pollFile.php", function(data)	{
-					console.log(data);
-					
-					if(data != "waiting")
-					{
-						str = data.split("\n");
-						if(str[0]=="results")
-						{
-							console.log("done");
-							stop = false;
-							console.log(stop);
-							clearTimeout(timer);
-						}
-						else
-						{
-							update(str);
-						}
-					}
+	$.get("php/pollFile.php", function(data){
+		if(data != "waiting")
+		{
+			str = data.split("\n");
+			if(str[0]=="results")
+			{
+				clearTimeout(timer);
+			}
+			else
+			{
+				update(str);
+			}
+		}
 	});
 }
 
@@ -62,10 +54,8 @@ function update(str)
 	document.getElementById("reserved_berths").innerHTML = str[10] + " berths reserved.";
 }
 
-$(document).ready(function() {
-    console.log( "ready!" );
-
-		poll();
+$(document).ready(function(){
+	poll();
 });
 
 $(window).unload(function(){
