@@ -1,30 +1,31 @@
-body,
-html {
-margin:0;
-padding:0;
-color:#000;
-background:#a7a09a;
+body,html{
+	margin:0;
+	padding:0;
+	color:#000;
+	background:#a7a09a;
 }
 
-#wrap {
-width:750px;
-margin:0 auto;
-background:#99c;
+#wrap{
+	width:750px;
+	margin:0 auto;
+	background:#99c;
 }
 
 
-#header {
-background:#ddd;
+#header{
+	background:#ddd;
 }
-#main {
-background:#33CCFF;
-float:left;
-width:500px;
+
+#main{
+	background:#33CCFF;
+	float:left;
+	width:500px;
 }
-#sidebar {
-background:#99FF33;
-float:right;
-width:250px;
+
+#sidebar{
+	background:#99FF33;
+	float:right;
+	width:250px;
 }
 
 #sidebar{
@@ -83,6 +84,35 @@ width:250px;
 	color: red;
 }
 
+#control{
+	height:45px;
+}
+
+.control_params{
+	display:inline-block;
+	width:600px;
+}
+
+#control_params_mode{
+	width:600px;
+}
+
+#control_params_time{
+	margin-top:3px;
+	width:600px;
+}
+
+.submit_button{
+	display:inline-block;
+	float:right;
+	width:150px;
+	height:45px;
+}
+
+#processAllDup{
+	width:150px;
+	margin-top:10px;
+}
 
 input[type=text] {
 }

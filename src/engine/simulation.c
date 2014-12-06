@@ -423,7 +423,7 @@ void write_results(){
 	//Taxiway stats, per taxiway
 	fprintf(results, "%d\n", params->numTaxiways);
 	for (i=0, occupied=0; i<params->numTaxiways; i++){
-		fprintf(results, "%.2f\n", 100*taxiways[i]->occupied_time/sim_time);
+		fprintf(results, "%.2f ", 100*taxiways[i]->occupied_time/sim_time);
 		occupied+=taxiways[i]->occupied_time;
 	}
 	//Taxiway stats, totals
@@ -431,13 +431,13 @@ void write_results(){
 	//Berths stats, per berth
 	fprintf(results, "%d\n", params->numBerths);
 	for (i=0, reserved=0, occupied=0; i<params->numBerths; i++){
-		fprintf(results, "%.2f\n", 100*berths[i]->reserved_time/sim_time);
-		fprintf(results, "%.2f\n", 100*berths[i]->occupied_time/sim_time);
+		fprintf(results, "%.2f ", 100*berths[i]->reserved_time/sim_time);
+		fprintf(results, "%.2f  ", 100*berths[i]->occupied_time/sim_time);
 		reserved+=berths[i]->reserved_time;
 		occupied+=berths[i]->occupied_time;
 	}
 	//Berths stats, totals
-	fprintf(results, "%.2f\n", 100*(reserved/params->numBerths)/sim_time);
+	fprintf(results, "%.2f ", 100*(reserved/params->numBerths)/sim_time);
 	fprintf(results, "%.2f\n", 100*(occupied/params->numBerths)/sim_time);
 	
 	//Fx plane stats
@@ -455,8 +455,8 @@ void write_results(){
 			avg_queue_time+=planes[current+j]->queue_time;
 			avg_res_time+=planes[current+j]->residence_time;
 		}
-		fprintf(results, "%.2f\n", (100.0*p_landings)/p_arrivals);
-		fprintf(results, "%.2f\n", avg_queue_time/j);
+		fprintf(results, "%.2f ", (100.0*p_landings)/p_arrivals);
+		fprintf(results, "%.2f ", avg_queue_time/j);
 		fprintf(results, "%.2f\n", avg_res_time/j);
 	}
 	

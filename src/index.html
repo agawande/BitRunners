@@ -11,12 +11,22 @@
 	<div id="header"><img src="media/header.png" width="750" height="75px"></div>
 	<div id="control">
 		<a name="top"></a>
-		Update mode: 
-		<input type="radio" name="update_mode" id="none" value="None" onclick="checkRadio(this.id);" checked />None
-		<input type="radio" name="update_mode" id="time" value="Time" onclick="checkRadio(this.id);" />Time
-		<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
-		<input type="text" class="input_correct" id="updates" value=""  onblur="checkInput(this.id)" disabled >
-		<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" />
+		<div class="control_params">
+			<div id="control_params_mode">
+				Update mode: 
+				<input type="radio" name="update_mode" id="none" value="None" onclick="checkRadio(this.id);" checked />None
+				<input type="radio" name="update_mode" id="time" value="Time" onclick="checkRadio(this.id);" />Time
+				<input type="radio" name="update_mode" id="event" value="Event" onclick="checkRadio(this.id);" />Event
+				<input type="text" class="input_correct" id="updates" value=""  onblur="checkInput(this.id)" disabled >
+			</div>
+			<div id="control_params_time">
+				Time between updates:
+				<input type="text" class="input_correct" id="update_time" value="" onblur="checkInput(this.id)" disabled>
+			</div>
+		</div>
+		<div class="submit_button">
+			<input type="button" id="processAllDup" value="Start Simulation" onClick="processAllSets()" />
+		</div>
 	</div>
 	<div id="main">
 	<div class="space">
