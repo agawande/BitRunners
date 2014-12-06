@@ -1,0 +1,57 @@
+<html>
+<head>
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="js/lib/flot/jquery.flot.js"></script>
+<script type="text/javascript" src="js/lib/flot/jquery.flot.pie.js"></script>
+<title>Simulation GUI</title>
+<script>
+
+$(document).ready(function() {
+	readResults();
+});
+
+function readResults()
+{
+$.get("php/readResults.php", function(data){
+			console.log("sdvg "+data);
+			if(data!="empty")
+			{
+				str = data.split("\n");
+				display(str);
+			}
+			else
+			{
+				console.log("empty");
+			}
+	});
+}
+
+var options = {
+    series: {
+        pie: {
+            show: true,
+            tilt: 0.5
+        }
+    }
+};
+
+function display(str)
+{
+	document.getElementById("sim_time").innerHTML = "Total Simulation Time: "+str[0];
+	document.getElementById("storm_time").innerHTML = "Storm Time: "+parseFloat(str[0])*0.01*parseFloat(str[1]);
+	var percentStorm = [
+		{label: "Simulation Time", data: parseFloat(str[0]) - parseFloat(str[1]), color: "#005CDE" },
+    	{label: "Storm Time", data: parseFloat(str[1]), color: "#00A36A"}
+	];
+	$.plot($("#percent_storm"), percentStorm, options);
+	document.getElementById("num_storms").innerHTML = "Total Storms: "+str[2];
+}
+</script>
+<body>
+<p id="sim_time" align="center"></p></div>
+<p id="storm_time" align="center"></p>
+<p id="percent_storm" height="400px"></p>
+<p id="num_storms" align="center"></p>
+</body>
+</head>
+</html>
