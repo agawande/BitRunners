@@ -209,7 +209,7 @@
 		}
 		else
 		{
-		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number")
+		    if(textid == "berth_number" || textid == "taxiway_number" || textid == "ex_plane_number" || textid == "update_time")
 			{
 				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){
 					wrong(textid);
@@ -509,7 +509,7 @@
 					correct("updates");
 				}
 			}
-			if (param_val==0){
+			if (!update_time.value.match(/^\s*(\+|-)?\d+\s*$/) || update_time==0){
 				wrong("update_time");
 			}
 			else{
