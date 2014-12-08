@@ -22,6 +22,7 @@ function poll()
 			if(str[0]=="results")
 			{
 				clearTimeout(timer);
+				window.location.href = 'final.html';
 			}
 			else
 			{
@@ -38,7 +39,7 @@ function update(str)
 	var percent = 100*(parseFloat(simP[0])/parseFloat(simP[1]));
 	$( "#simProgress" ).progressbar({value: percent});
 	document.getElementById("arrivals").innerHTML = str[1] + " Arrivals, "+ str[2] + " Landings";
-	document.getElementById("weather").innerHTML = "Weather (" + str[4] + "storms so far)";
+	document.getElementById("weather").innerHTML = "Weather (" + str[4] + " storms so far)";
 	if(str[3]=="0")
 	{
 		document.getElementById("wimage").src = "media/sun.jpeg";
