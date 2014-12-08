@@ -4,7 +4,7 @@ $results = "../engine/results";
 if(file_exists($results))
 {
 	$data = file_get_contents($results);
-	echo "hello".$data;
+	echo $data;
 }
 else
 {

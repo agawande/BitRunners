@@ -8,7 +8,7 @@ if(file_exists($results) || file_exists($current))
 {
 	if(file_exists($results))
 	{
-		$data = "results".file_get_contents($results);
+		$data = "results\n".file_get_contents($results);
 	}
 	else
 	{
