@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Simulation GUI</title>
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+<link href="css/lib/jquery-ui.css" rel="stylesheet">
+      <script src="js/lib/jquery-1.10.2.js"></script>
+      <script src="js/lib/jquery-ui.js"></script>
+</head>
+<script>
+
+var timer;
+var str = "";
+
+function poll()
+{
+	timer = setTimeout(function(){poll();}, 500);
+	$.get("php/pollFile.php", function(data){
+		console.log("poll");
+		if(data != "waiting")
+		{
+			str = data.split("\n");
+			if(str[0]=="results")
+			{
+				clearTimeout(timer);
+				window.location.href = 'final.html';
+			}
+		}
+	});
+}
+
+$(document).ready(function(){
+	poll();
+});
+
+function abort(){
+	clearTimeout(timer);
+	$.ajax({
+		async: false,
+		url: 'php/abort.php'
+	});
+}
+
+</script>
+<body onunload="abort()">
+<img src="loading.gif" />
+</body>
+</html>

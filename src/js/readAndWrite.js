@@ -4,6 +4,7 @@
 	var noOfFields = 6;
 	var inputString = "";
 	var simTime="aaaa";
+	var isNone=true;
 	
 	/*alert('Javascript file is opened!');
 	$(function() {
@@ -16,6 +17,10 @@
 			//console.log(node);
 			sourceNode.parentNode.appendChild(node);
 			//console.log("Hello");
+			for(var j=1; j<=counter; j++)
+			{
+				document.getElementById("num_update_"+j).textContent="External plane set " + (j+1) +" parameters";
+			}
 	}
 	
 	function deleteSet(){
@@ -149,8 +154,15 @@
 					console.log("msg" + msg);
 				}
 			});
-			
-			window.location.href = 'loading.html'; { input: inputString }
+
+			if(!document.getElementById("none").checked)
+			{
+				window.location.href = 'loading.html';
+			}
+			else
+			{
+				window.location.href = 'waiting.html';
+			}
     }
     
     var counter = 0;
@@ -475,7 +487,7 @@
 			
 			update_time.className="input_correct";
 			update_time.disabled=true;
-			
+
 			document.getElementById("processAllDup").disabled = false;
 		}
 		else{
@@ -497,7 +509,7 @@
 					correct("updates");
 				}
 			}
-			if (!update_param.value.match(/^\s*(\+|-)?\d+\s*$/) || param_val==0){
+			if (param_val==0){
 				wrong("update_time");
 			}
 			else{
@@ -508,16 +520,20 @@
 
 	function correct(textid)
 	{
+		console.log(textid);
 		document.getElementById(textid).className="input_correct";
 		
 		var l = textid.charAt(textid.length-2);
-		if(l != "_")
+		if(textid!="updates"&&textid!="update_time")
 		{
-			document.getElementById(textid+"_status").innerHTML="";
-		}
-		else
-		{
-			document.getElementById(textid.substring(0, textid.length-2)+"_status_"+textid.charAt(textid.length-1)).innerHTML="";
+			if(l != "_")
+			{
+				document.getElementById(textid+"_status").innerHTML="";
+			}
+			else
+			{
+				document.getElementById(textid.substring(0, textid.length-2)+"_status_"+textid.charAt(textid.length-1)).innerHTML="";
+			}
 		}
 		if(allCorrect())
 		{

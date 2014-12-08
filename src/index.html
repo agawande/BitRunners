@@ -48,7 +48,7 @@
 		<span class="input_wrong_alert" id="cat3_landing_status"></span>
 		
 		<div class="container" id="external_plane_params">
-		<h2>External plane set 1 parameters  </h2>
+		<h2 id="num_update">External plane set 1 parameters  </h2>
 		<div class="caption">Number of planes</div>
 		<input type="text" class="input_correct" id="ex_plane_number" value="5" onblur="checkInput(this.id)">
 		<span class="input_wrong_alert" id="ex_plane_number_status"></span>
@@ -68,9 +68,10 @@
 		<input type="text" class="input_correct" id="ex_cat3_landing" value="50" onblur="checkInput(this.id)">
 		<span class="input_wrong_alert" id="ex_cat3_landing_status"></span>
 		</div>
+			
+		</div>   <!-- END OF SPACE-->
 			<input type="button" class="buttonWidth" id="btnAddressAdd" value="+" onClick="addSet()"/>
 			<input type="button" id="delete" value="--" onClick="deleteSet()" />
-		</div>   <!-- END OF PLANES-->
 	</div>  <!-- END OF MAIN-->
 	<div id="sidebar">
 		<div class="space">

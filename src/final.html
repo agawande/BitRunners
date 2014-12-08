@@ -1,19 +1,55 @@
 <html>
 <head>
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="js/lib/flot/jquery.flot.js"></script>
-<script type="text/javascript" src="js/lib/flot/jquery.flot.pie.js"></script>
-<title>Simulation GUI</title>
-<script>
+<script src="js/lib/Chart.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 
+<title>Simulation GUI</title>
+</head>
+<style>
+.taxi_chart div {
+  font: 10px sans-serif;
+  background-color: black;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+  margin-left: 32%;
+}
+
+.berth_chart_res div {
+  font: 10px sans-serif;
+  background-color: red;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+  margin-left: 32%;
+}
+
+
+.berth_chart_occ div {
+  font: 10px sans-serif;
+  background-color: green;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+  margin-left: 32%;
+}
+</style>
+<script>
+var ctx;
 $(document).ready(function() {
+	ctx = document.getElementById("myChart").getContext("2d");
+	ctx1 = document.getElementById("myChart1").getContext("2d");
 	readResults();
 });
 
 function readResults()
 {
 $.get("php/readResults.php", function(data){
-			console.log("sdvg "+data);
+			console.log(data);
 			if(data!="empty")
 			{
 				str = data.split("\n");
@@ -26,32 +62,169 @@ $.get("php/readResults.php", function(data){
 	});
 }
 
-var options = {
-    series: {
-        pie: {
-            show: true,
-            tilt: 0.5
-        }
-    }
+var data;
+function d(d1, d2, t1, t2, c1, c2){
+var diff = d1-d2;
+console.log(diff);
+data = [
+		{
+			value: d2,
+			color:c1,
+			highlight: c1,
+			label: t1
+		},
+		{
+			value: diff,
+			color: c2,
+			highlight: c2,
+			label: t2
+		}
+	];
+}
+
+var options={
+    //Boolean - Whether we should show a stroke on each segment
+    segmentShowStroke : true,
+
+    //String - The colour of each segment stroke
+    segmentStrokeColor : "#fff",
+
+    //Number - The width of each segment stroke
+    segmentStrokeWidth : 2,
+
+    //Number - The percentage of the chart that we cut out of the middle
+    percentageInnerCutout : 0, // This is 0 for Pie charts
+
+    //Number - Amount of animation steps
+    animationSteps : 100,
+
+    //String - Animation easing effect
+    animationEasing : "easeOutBounce",
+
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate : true,
+
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale : false,
+
+    //String - A legend template
+    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+
 };
+
+function stats(dataArray, select, width)
+{
+	var x = d3.scale.linear()
+    .domain([0, d3.max(dataArray)])
+    .range([0, width]);
+
+	d3.select(select)
+	  .selectAll("div")
+		.data(dataArray)
+	  .enter().append("div")
+		.style("width", function(d) { return x(d) + "px"; })
+		.text(function(d) { return d; });
+
+}
+
+var taxiOccupiedPercentTime="";
+var totalPercentTimeOccupied="";
+var j=0;
 
 function display(str)
 {
 	document.getElementById("sim_time").innerHTML = "Total Simulation Time: "+str[0];
 	document.getElementById("storm_time").innerHTML = "Storm Time: "+parseFloat(str[0])*0.01*parseFloat(str[1]);
-	var percentStorm = [
-		{label: "Simulation Time", data: parseFloat(str[0]) - parseFloat(str[1]), color: "#005CDE" },
-    	{label: "Storm Time", data: parseFloat(str[1]), color: "#00A36A"}
-	];
-	$.plot($("#percent_storm"), percentStorm, options);
 	document.getElementById("num_storms").innerHTML = "Total Storms: "+str[2];
+	d(parseInt(str[0]), parseInt(parseFloat(str[0])*0.01*parseFloat(str[1])), "Storms", "Normal", "black", "green");
+	var myPieChart1 = new Chart(ctx1).Pie(data,options);
+
+	document.getElementById("arrivals").innerHTML = "Total Arrivals: "+str[3].split("/")[0];
+	//document.getElementById("landings").innerHTML = "Landings: "+str[3].split("/")[1];
+	d(parseInt(str[3].split("/")[0]), parseInt(str[3].split("/")[1]), "Landings", "Redirected", "#F7464A", "#46BFBD");
+	var myPieChart = new Chart(ctx).Pie(data,options);
+
+
+	document.getElementById("num_taxiway").innerHTML = "No. of taxiways: "+str[4];
+	var taxiStats = str[5].split(" ");
+	//document.getElementById("taxi_stats").innerHTML = "Occupancy time per taxiway" + taxiStats;
+	console.log(taxiStats);
+	stats(taxiStats, ".taxi_chart", 100);
+
+	document.getElementById("total_pc_time_occupied").innerHTML = "Total time taxis are occupied: " + str[6];
+	document.getElementById("num_berths").innerHTML = "Number of berths " + str[7];
+	var berthStats = str[8].split("  ");
+	//document.getElementById("berth_stats").innerHTML = "Berth stats: " + berthStats;
+	var numRes = new Array (berthStats.length);
+	var numOcc = new Array (berthStats.length);
+	for(var i = 0; i<numRes.length; i++)
+	{
+		numRes[i] = berthStats[i].split(" ")[0];
+		numOcc[i] = berthStats[i].split(" ")[1];
+	}
+	stats(numRes, ".berth_chart_res", 100);
+	stats(numOcc, ".berth_chart_occ", 100);
+
+	document.getElementById("berth_total_reserved").innerHTML = "Total % of time berths reserved: " + str[9].split(" ")[0];
+	document.getElementById("berth_total_occupied").innerHTML = "Total % of time berths occupied: " + str[9].split(" ")[1];
+	document.getElementById("percent_timed_landed").innerHTML = "Total % of time the plane landed: " + str[10];
+	document.getElementById("avg_queue_time").innerHTML = "Average queue time: " + str[11];
+	document.getElementById("avg_residence_time").innerHTML = "Average residence time: " + str[12];
+	document.getElementById("num_external_sets").innerHTML = "No. of external plane sets: " + str[13];
+	var externalStats = str[14].split("  ");
+	//document.getElementById("external_plane_stats").innerHTML = "External plane sets statistics: " + externalStats;
+	var pcPlane;
+	var avgQTime;
+	var avgResTime;
+	for(var i = 0; i<externalStats.length; i++)
+	{
+		pcPlane = externalStats[i].split(" ")[0];
+		avgQTime = externalStats[i].split(" ")[1];
+		avgResTime = externalStats[i].split(" ")[2];
+		ext(i, pcPlane, avgQTime, avgResTime);
+	}
 }
+
+function ext(i, pcPlane, avgQTime, avgResTime)
+{
+	document.getElementById("external_plane_stats").innerHTML += 
+	"Plane no. "+ (i+1) +"<br> Percentage of time the plane landed: " + pcPlane + "<br> Average Queue Time: " + avgQTime 
+	+ "<br> Average Residence Time: " + avgResTime +"<br><hr>";
+}
+
 </script>
+
 <body>
 <p id="sim_time" align="center"></p></div>
 <p id="storm_time" align="center"></p>
-<p id="percent_storm" height="400px"></p>
 <p id="num_storms" align="center"></p>
+<p align="center"><canvas id="myChart1" width="200" height="200"></canvas></p>
+<hr />
+<p align="center"><canvas id="myChart" width="200" height="200"></canvas></p>
+<p id="arrivals" align="center"></p>
+<p id="landings" align="center"></p>
+<p id="percent_timed_landed" align="center"></p>
+<hr />
+<p id="num_taxiway" align="center"></p>
+<p id="taxi_stats" align="center"></p>
+<p align="center"> Percentage of time the  different taxiways are occupied:</p>
+<div class="taxi_chart"></div>
+<p id="total_pc_time_occupied" align="center"></p>
+<hr />
+<p id="num_berths" align="center"></p>
+<p align="center"> Percentage of time the different berths are reserved:</p>
+<div class="berth_chart_res"></div>
+<p align="center"> Percentage of time the different berths are occupied:</p>
+<div class="berth_chart_occ"></div>
+<p id="berth_stats" align="center"></p>
+<p id="berth_total_reserved" align="center"></p>
+<p id="berth_total_occupied" align="center"></p>
+<hr />
+<p id="avg_queue_time" align="center"></p>
+<p id="avg_residence_time" align="center"></p>
+<hr />
+<p id="num_external_sets" align="center"></p>
+<hr />
+<p id="external_plane_stats" align="center"></p>
 </body>
-</head>
 </html>
