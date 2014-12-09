@@ -5,9 +5,13 @@ LIBS = -lm
 EXEC = gpct
 KILLEXEC = gpct_kill
 
-all:
-	$(CC) $(SRC) -o $(EXEC) $(LIBS)
-	$(CC) $(KILLSRC) -o $(EXEC)
-	
+all: main kill
+
 clean:
 	rm -rf $(EXEC) $(KILLEXEC) *~
+
+main:
+	$(CC) $(SRC) -o $(EXEC) $(LIBS)
+	
+kill:
+	$(CC) $(KILLSRC) -o $(KILLEXEC)
