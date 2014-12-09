@@ -143,7 +143,7 @@
 		else if(document.getElementById("none")){update_mode="0"}
 		else{update_mode="2"}
 
-		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str 			+update_mode +"\n" + document.getElementById("updates").value;
+		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str 			+update_mode +"\n" + document.getElementById("updates").value + "\n" + document.getElementById("update_time").value;
 		console.log(inputString);
 
 			$.ajax({

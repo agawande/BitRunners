@@ -13,7 +13,7 @@ var str = "";
 
 function poll()
 {
-	timer = setTimeout(function(){poll();}, 500);
+	timer = setTimeout(function(){poll();}, 50);
 	$.get("php/pollFile.php", function(data){
 		console.log("poll");
 		if(data != "waiting")

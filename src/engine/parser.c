@@ -150,9 +150,11 @@ Parameters* read_input_file(char *filepath){
 	p = read_next_int(p, &parameters->update_mode);
 	if (parameters->update_mode==1){
 		p = read_next_float(p, &parameters->update_time);
+		p = read_next_int(p, &parameters->update_real_time_ms);
 	}
 	else if (parameters->update_mode==2){
 		p = read_next_int(p, &parameters->update_events);
+		p = read_next_int(p, &parameters->update_real_time_ms);
 	}
 	
 	free(buffer);

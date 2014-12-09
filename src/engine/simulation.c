@@ -35,6 +35,10 @@
 #define ACK_FILENAME "_acknowledged"
 #define ABORT_FILENAME "_abort"
 
+//Timing
+#define SLEEP_TIME_US 50*1000
+#define ABORT_TIME_MS 5000
+
 //Global variables suck, but still...
 Parameters *params;
 
@@ -493,12 +497,22 @@ void push_stats(){
 	}
 }
 
-void wait_for_ack(){
+int wait_for_ack(){
+	int d=0;
 	while (!exists(ACK_FILENAME) && !exists(ABORT_FILENAME)){
-		usleep(100*1000); //100 milliseconds
+		usleep(SLEEP_TIME_US); //50 milliseconds
+		d++;
+		if (d*(SLEEP_TIME_US/1000)>ABORT_TIME_MS){
+			return 1;
+		}
 	}
+	printf("Found after %d awakenings.\n", d);
 	remove(ACK_FILENAME);
-	usleep(500000);
+	if (d*(SLEEP_TIME_US/1000)<params->update_real_time_ms){
+		usleep(params->update_real_time_ms*1000-d*SLEEP_TIME_US);
+	}
+	
+	return 0;
 }
 
 int start_simulation(Parameters *p){
@@ -578,13 +592,19 @@ int start_simulation(Parameters *p){
 			printf("Next update at %.2f\n", sim_time+params->update_time);
 			add_event(EVENT_UPDATE, params->update_time);
 			write_update();
-			wait_for_ack();
+			if (wait_for_ack()){
+				printf("Aborting simulation\n");
+				return 0;
+			}
 		}
 		
 		//Event-based updates
 		if (params->update_mode==2 && num_update++%params->update_events){
 			write_update();
-			wait_for_ack();
+			if (wait_for_ack()){
+				printf("Aborting simulation\n");
+				return 0;
+			}
 		}
 	}
 	while (next_event_type!=EVENT_SIM_END);
