@@ -4,17 +4,16 @@ BitRunners GPCT
 Pre-Requisite
 
 1) Web server with php
-2) C++ Compiler
+	sudo apt-get install apache2
+	sudo apt-get install php5
 
-Compile the program
-
-1) Go to the engine folder located in src/engine
-2) Run: ./compile.sh
+2) C/C++ Compiler
+	sudo apt-get install gcc
 
 Run the program
 
-1) Be in the same folder (src/engine)
-2) Run: ./gpct
-3) Go to the GUI folder (src/GUI)
-4) Open index.html (localhost/BitRunners/src/GUI/), fill the form and click on start simulation.
+1) Run ./install.sh to copy files to localhost
+2) Double click on gptc (located under src/engine) to start the program
+3) Go to your browser and type "localhost" in the address bar to access the GUI
+
 
