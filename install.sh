@@ -1,6 +1,6 @@
 #!/bin/sh
 cd src/
-cp -r * /var/www/html/
+sudo cp -r * /var/www/html/
 cd /var/www/
 echo "Giving everybody the permission to write to the html folder:"
 sudo chmod -R o+w html/
