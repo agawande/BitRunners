@@ -463,8 +463,8 @@ void write_results(){
 		for (j=0; j<params->xPlaneTypes[i].numPlanes; j++){
 			p_arrivals+=planes[current+j]->arrivals;
 			p_landings+=planes[current+j]->times_served;
-			avg_queue_time+=planes[current+j]->queue_time;
-			avg_res_time+=planes[current+j]->residence_time;
+			avg_queue_time+=planes[current+j]->queue_time/p_landings;
+			avg_res_time+=planes[current+j]->residence_time/p_landings;
 		}
 		fprintf(results, "%.2f ", (100.0*p_landings)/p_arrivals);
 		fprintf(results, "%.2f ", avg_queue_time/j);
