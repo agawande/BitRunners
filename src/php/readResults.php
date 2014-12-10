@@ -5,6 +5,7 @@ if(file_exists($results))
 {
 	$data = file_get_contents($results);
 	echo $data;
+	unlink($results);
 }
 else
 {

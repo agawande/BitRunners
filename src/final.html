@@ -136,7 +136,7 @@ var j=0;
 function display(str)
 {
 	document.getElementById("sim_time").innerHTML = "Total Simulation Time: "+str[0];
-	document.getElementById("storm_time").innerHTML = "Storm Time: "+parseFloat(str[0])*0.01*parseFloat(str[1]);
+	document.getElementById("storm_time").innerHTML = "Storm Time: "+(parseFloat(str[0])*0.01*parseFloat(str[1])).toFixed(2);;
 	document.getElementById("num_storms").innerHTML = "Total Storms: "+str[2];
 	d(parseInt(str[0]), parseInt(parseFloat(str[0])*0.01*parseFloat(str[1])), "Storms", "Normal", "black", "green");
 	var myPieChart1 = new Chart(ctx1).Pie(data,options);
@@ -194,7 +194,7 @@ function display(str)
 function ext(i, pcPlane, avgQTime, avgResTime)
 {
 	document.getElementById("external_plane_stats").innerHTML += 
-	"Plane no. "+ (i+1) +"<br> Landing percentage: " + pcPlane + "<br> Average Queue Time: " + avgQTime 
+	"Plane set no. "+ (i+1) +"<br> Landing percentage: " + pcPlane + "<br> Average Queue Time: " + avgQTime 
 	+ "<br> Average Residence Time: " + avgResTime +"<br><hr>";
 }
 
