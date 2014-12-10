@@ -10,32 +10,35 @@
 .taxi_chart div {
   font: 10px sans-serif;
   background-color: black;
-  text-align: right;
+  text-align: left;
   padding: 3px;
   margin: 1px;
-  color: white;
-  margin-left: 32%;
+  color: black;
+  text-indent: -5em;
+  margin-left:40%;
 }
 
 .berth_chart_res div {
   font: 10px sans-serif;
   background-color: red;
-  text-align: right;
+  text-align: left;
   padding: 3px;
   margin: 1px;
-  color: white;
-  margin-left: 32%;
+  color: black;
+  text-indent: -5em;
+  margin-left:40%;
 }
 
 
 .berth_chart_occ div {
   font: 10px sans-serif;
   background-color: green;
-  text-align: right;
+  text-align: left;
   padding: 3px;
   margin: 1px;
-  color: white;
-  margin-left: 32%;
+  color: black;
+  text-indent: -5em;
+  margin-left:40%;
 }
 </style>
 <script>
@@ -124,7 +127,6 @@ function stats(dataArray, select, width)
 	  .enter().append("div")
 		.style("width", function(d) { return x(d) + "px"; })
 		.text(function(d) { return d; });
-
 }
 
 var taxiOccupiedPercentTime="";
@@ -167,7 +169,7 @@ function display(str)
 
 	document.getElementById("berth_total_reserved").innerHTML = "Total % of time berths reserved: " + str[9].split(" ")[0];
 	document.getElementById("berth_total_occupied").innerHTML = "Total % of time berths occupied: " + str[9].split(" ")[1];
-	document.getElementById("percent_timed_landed").innerHTML = "Total % of time the plane landed: " + str[10];
+	document.getElementById("percent_timed_landed").innerHTML = "Landing percentage: " + str[10];
 	document.getElementById("avg_queue_time").innerHTML = "Average queue time: " + str[11];
 	document.getElementById("avg_residence_time").innerHTML = "Average residence time: " + str[12];
 	document.getElementById("num_external_sets").innerHTML = "No. of external plane sets: " + str[13];
@@ -176,6 +178,10 @@ function display(str)
 	var pcPlane;
 	var avgQTime;
 	var avgResTime;
+	for(var j = 0; j<externalStats.length; j++)
+	{
+		
+	}
 	for(var i = 0; i<externalStats.length; i++)
 	{
 		pcPlane = externalStats[i].split(" ")[0];
@@ -188,7 +194,7 @@ function display(str)
 function ext(i, pcPlane, avgQTime, avgResTime)
 {
 	document.getElementById("external_plane_stats").innerHTML += 
-	"Plane no. "+ (i+1) +"<br> Percentage of time the plane landed: " + pcPlane + "<br> Average Queue Time: " + avgQTime 
+	"Plane no. "+ (i+1) +"<br> Landing percentage: " + pcPlane + "<br> Average Queue Time: " + avgQTime 
 	+ "<br> Average Residence Time: " + avgResTime +"<br><hr>";
 }
 
@@ -207,14 +213,14 @@ function ext(i, pcPlane, avgQTime, avgResTime)
 <hr />
 <p id="num_taxiway" align="center"></p>
 <p id="taxi_stats" align="center"></p>
-<p align="center"> Percentage of time the  different taxiways are occupied:</p>
+<p align="center"> Percentage of time taxiways are occupied:</p>
 <div class="taxi_chart"></div>
 <p id="total_pc_time_occupied" align="center"></p>
 <hr />
 <p id="num_berths" align="center"></p>
-<p align="center"> Percentage of time the different berths are reserved:</p>
+<p align="center"> Percentage of time berths are reserved:</p>
 <div class="berth_chart_res"></div>
-<p align="center"> Percentage of time the different berths are occupied:</p>
+<p align="center"> Percentage of time berths are occupied:</p>
 <div class="berth_chart_occ"></div>
 <p id="berth_stats" align="center"></p>
 <p id="berth_total_reserved" align="center"></p>

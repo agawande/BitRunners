@@ -138,10 +138,10 @@
 		} // end of outer for
 		//console.log(ex_str);
 		//console.log(simTime);
-		var update_mode;
+		var update_mode=2;
 		if(document.getElementById("time").checked){update_mode="1"}
-		else if(document.getElementById("none")){update_mode="0"}
-		else{update_mode="2"}
+		else if(document.getElementById("updates").disabled){update_mode="0"}
+		else {update_mode="2"}
 
 		inputString = simTime + "\n " + weather + "\n " + airportFeatures + "\n " + regularPlane + "\n " + (counter+1) + "\n" +ex_str 			+update_mode +"\n" + document.getElementById("updates").value + "\n" + document.getElementById("update_time").value;
 		console.log(inputString);
