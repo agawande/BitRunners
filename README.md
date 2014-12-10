@@ -15,11 +15,13 @@ BitRunners GPCT
 
 **Run the program**
 
-1) Run sudo ./install.sh to copy files to localhost
+1) Run make to compile 
 
-2) Double click on gptc (located under src/engine) to start the program
+2) Run sudo make install to install to /var/www/html/gpct
 
-3) Go to your browser and type "localhost" in the address bar to access the GUI
+3) Double click on gptc (located under src/engine) to start the program
+
+4) Go to your browser and type "localhost/gpct" in the address bar to access the GUI
 
 
 
