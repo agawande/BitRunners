@@ -223,7 +223,7 @@
 			}
 			else if(textid == "sim_time")
 			{
-				if(val<24){
+				if(val<24 || val > 87658){
 					wrong(textid);
 					document.getElementById(textid+"_status").innerHTML="At least 24 hours";
 				}
