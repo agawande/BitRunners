@@ -11,7 +11,7 @@ clean:
 	rm -rf $(EXEC) $(KILLEXEC) *~
 
 main:
-	$(CC) -ggdb -o $(EXEC) $(LIBS) $(SRC)
+	$(CC) -g -o $(EXEC) $(LIBS) $(SRC)
 	
 kill:
-	$(CC) -ggdb -o $(KILLEXEC) $(KILLSRC)
+	$(CC) -g -o $(KILLEXEC) $(KILLSRC)
