@@ -12,3 +12,6 @@ engine_clean:
 
 install:
 	cp -r src/* /var/www/html/ && chmod -R a+rw /var/www/html/engine
+	
+uninstall:
+	rm -rf /var/www/html/*
