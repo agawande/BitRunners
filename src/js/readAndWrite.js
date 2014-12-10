@@ -213,7 +213,11 @@
 			{
 				if(!input.value.match(/^\s*(\+|-)?\d+\s*$/) || val == 0){
 					wrong(textid);
-					document.getElementById(textid+"_status").innerHTML="Needs to be a positive integer";
+					document.getElementById(textid+"_status").innerHTML="Needs to be a positive integer";console.log("dvkb "+val);
+				}
+				else if(textid=="update_time"&&(val<100 || val>2000))
+				{
+						wrong(textid);
 				}
 				else{correct(textid);}
 			}
