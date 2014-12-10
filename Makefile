@@ -11,4 +11,4 @@ engine_clean:
 	$(MAKE) -C src/engine clean
 
 install:
-	cp -r src/* /var/www/html/
+	cp -r src/* /var/www/html/ && chmod -R a+rw /var/www/html/engine
