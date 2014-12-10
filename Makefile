@@ -10,7 +10,7 @@ engine:
 engine_clean:
 	$(MAKE) -C src/engine clean
 
-install:
+install: uninstall
 	cp -r src/* /var/www/html/ && chmod -R a+rw /var/www/html/engine
 	
 uninstall:
