@@ -599,7 +599,7 @@ int start_simulation(Parameters *p){
 		}
 		
 		//Event-based updates
-		if (params->update_mode==2 && num_update++%params->update_events){
+		if (params->update_mode==2 && !(++num_update%params->update_events)){
 			write_update();
 			if (wait_for_ack()){
 				printf("Aborting simulation\n");
