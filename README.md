@@ -1,6 +1,8 @@
 BitRunners GPCT
 ==========
 
+[User Manual](https://github.com/agawande/BitRunners/raw/master/doc/Bitrunners_UserManual.pdf)
+
 **Pre-Requisite**
 
 1) Apache web server with PHP5
