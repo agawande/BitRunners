@@ -1,7 +1,7 @@
 BitRunners GPCT
 ==========
 
-[User Manual](https://github.com/agawande/BitRunners/raw/master/doc/Bitrunners_UserManual.pdf)
+[User Manual](https://github.com/agawande/BitRunners/blob/master/doc/Bitrunners_UserManual.pdf)
 
 **Pre-Requisite**
 
